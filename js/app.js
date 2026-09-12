@@ -1,0 +1,636 @@
+import { Store } from "./data.js";
+
+const app = document.getElementById("app");
+const modalOverlay = document.getElementById("modal-overlay");
+const modalSheet = document.getElementById("modal-sheet");
+
+const state = {
+  tab: "dashboard",
+  filters: {
+    itinerary: "all",
+    suppliers: "all",
+    tourism: "all",
+    checklist: "all",
+  },
+};
+
+const ITINERARY_CATS = {
+  vol: "✈️ Vol",
+  hotel: "🏨 Hôtel",
+  transport: "🚗 Transport",
+  activite: "📍 Activité",
+  repas: "🍽️ Repas",
+};
+
+const SUPPLIER_STATUS = {
+  a_confirmer: "À confirmer",
+  confirme: "Confirmé",
+  termine: "Terminé",
+  annule: "Annulé",
+};
+
+const TOURISM_CATS = {
+  temple: "⛩️ Temple",
+  monument: "🏛️ Monument",
+  nature: "🏞️ Nature",
+  shopping: "🛍️ Shopping",
+  food: "🥟 Food",
+  quartier: "🏘️ Quartier",
+  musee: "🖼️ Musée",
+};
+
+const PRIORITIES = { haute: "Haute", moyenne: "Moyenne", basse: "Basse" };
+
+const CHECKLIST_CATS = {
+  admin: "📄 Admin",
+  bagage: "🧳 Bagage",
+  pouch: "🏷️ Pouch",
+  general: "✅ Général",
+};
+
+function escapeHtml(str) {
+  return (str || "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  }[c]));
+}
+
+function fmtDate(d) {
+  if (!d) return "Date non définie";
+  const date = new Date(d + "T00:00:00");
+  if (isNaN(date)) return d;
+  return date.toLocaleDateString("fr-FR", { weekday: "short", day: "2-digit", month: "short" });
+}
+
+function sortByDateTime(a, b) {
+  const da = `${a.date || "9999"}T${a.time || "00:00"}`;
+  const db = `${b.date || "9999"}T${b.time || "00:00"}`;
+  return da.localeCompare(db);
+}
+
+/* ---------- Navigation ---------- */
+
+function setTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll(".tab-btn").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+  document.querySelectorAll(".view").forEach((v) => v.classList.toggle("active", v.id === `view-${tab}`));
+  document.getElementById("fab").hidden = tab === "dashboard";
+  render();
+}
+
+/* ---------- Render: Dashboard ---------- */
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const target = new Date(dateStr + "T00:00:00");
+  return Math.round((target - today) / (1000 * 60 * 60 * 24));
+}
+
+function renderDashboard() {
+  const el = document.getElementById("view-dashboard");
+  const { trip, itinerary, suppliers, tourism, checklist } = Store.data;
+
+  const diff = daysUntil(trip.startDate);
+  let countdownText = "Définis les dates du voyage dans les réglages ⚙️";
+  if (diff !== null) {
+    if (diff > 0) countdownText = `Départ dans ${diff} jour${diff > 1 ? "s" : ""}`;
+    else if (diff === 0) countdownText = "C'est le grand départ aujourd'hui !";
+    else countdownText = `Voyage en cours / terminé (${trip.endDate ? "retour " + fmtDate(trip.endDate) : ""})`;
+  }
+
+  const upcomingItinerary = [...itinerary]
+    .filter((i) => !i.done)
+    .sort(sortByDateTime)
+    .slice(0, 3);
+
+  const upcomingSuppliers = [...suppliers]
+    .filter((s) => s.status !== "termine" && s.status !== "annule")
+    .sort(sortByDateTime)
+    .slice(0, 3);
+
+  const visitedCount = tourism.filter((t) => t.visited).length;
+  const checklistDone = checklist.filter((c) => c.done).length;
+
+  el.innerHTML = `
+    <div class="card" style="border-color: var(--gold); margin-bottom:18px;">
+      <div class="card-title" style="font-size:1.05rem;">${escapeHtml(trip.name || "Mon voyage en Chine")}</div>
+      <div class="card-sub">${escapeHtml(countdownText)}</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">${suppliers.length}</div>
+        <div class="stat-label">Rendez-vous fournisseurs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${visitedCount}/${tourism.length}</div>
+        <div class="stat-label">Lieux visités</div>
+        <div class="progress-bar"><div style="width:${tourism.length ? (visitedCount / tourism.length) * 100 : 0}%"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${itinerary.length}</div>
+        <div class="stat-label">Étapes d'itinéraire</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${checklistDone}/${checklist.length}</div>
+        <div class="stat-label">Checklist complétée</div>
+        <div class="progress-bar"><div style="width:${checklist.length ? (checklistDone / checklist.length) * 100 : 0}%"></div></div>
+      </div>
+    </div>
+
+    <div class="section-title">🗺️ Prochaines étapes</div>
+    ${upcomingItinerary.length ? upcomingItinerary.map(itineraryCardHtml).join("") : emptyState("Rien de planifié encore.")}
+
+    <div class="section-title">🤝 Prochains rendez-vous fournisseurs</div>
+    ${upcomingSuppliers.length ? upcomingSuppliers.map(supplierCardHtml).join("") : emptyState("Aucun rendez-vous planifié.")}
+  `;
+}
+
+function emptyState(text) {
+  return `<div class="empty-state">${escapeHtml(text)}</div>`;
+}
+
+/* ---------- Render: Itinerary ---------- */
+
+function itineraryCardHtml(item) {
+  const catLabel = ITINERARY_CATS[item.category] || item.category;
+  return `
+    <div class="card ${item.done ? "is-done" : ""}" data-id="${item.id}" data-collection="itinerary">
+      <div class="card-row">
+        <input type="checkbox" class="done-checkbox" data-action="toggle-done" ${item.done ? "checked" : ""} />
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(item.title)}</div>
+          <div class="card-sub">${fmtDate(item.date)}${item.time ? " · " + item.time : ""}${item.city ? " · " + escapeHtml(item.city) : ""}</div>
+          ${item.location ? `<div class="card-sub">📍 ${escapeHtml(item.location)}</div>` : ""}
+          ${item.notes ? `<div class="card-notes">${escapeHtml(item.notes)}</div>` : ""}
+          <div class="card-meta"><span class="pill cat-${item.category}">${catLabel}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderItinerary() {
+  const el = document.getElementById("view-itinerary");
+  const filter = state.filters.itinerary;
+  let items = [...Store.data.itinerary].sort(sortByDateTime);
+  if (filter !== "all") items = items.filter((i) => i.category === filter);
+
+  el.innerHTML = `
+    <div class="filter-row">
+      ${chip("all", "Tout", filter)}
+      ${Object.entries(ITINERARY_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
+    </div>
+    ${items.length ? items.map(itineraryCardHtml).join("") : emptyState("Aucune étape. Appuie sur + pour en ajouter.")}
+  `;
+  el.querySelectorAll(".chip").forEach((c) => {
+    c.addEventListener("click", () => {
+      state.filters.itinerary = c.dataset.value;
+      renderItinerary();
+    });
+  });
+  bindCardActions(el, "itinerary");
+}
+
+function chip(value, label, current) {
+  return `<button class="chip ${current === value ? "active" : ""}" data-value="${value}">${label}</button>`;
+}
+
+/* ---------- Render: Suppliers ---------- */
+
+function supplierCardHtml(s) {
+  return `
+    <div class="card" data-id="${s.id}" data-collection="suppliers">
+      <div class="card-row">
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(s.company)}</div>
+          <div class="card-sub">${fmtDate(s.date)}${s.time ? " · " + s.time : ""}${s.city ? " · " + escapeHtml(s.city) : ""}</div>
+          ${s.contact ? `<div class="card-sub">👤 ${escapeHtml(s.contact)}${s.phone ? " · " + escapeHtml(s.phone) : ""}</div>` : ""}
+          ${s.location ? `<div class="card-sub">📍 ${escapeHtml(s.location)}</div>` : ""}
+          ${s.products ? `<div class="card-notes"><strong>Produits :</strong> ${escapeHtml(s.products)}</div>` : ""}
+          ${s.notes ? `<div class="card-notes">${escapeHtml(s.notes)}</div>` : ""}
+          <div class="card-meta"><span class="pill status-${s.status}">${SUPPLIER_STATUS[s.status] || s.status}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSuppliers() {
+  const el = document.getElementById("view-suppliers");
+  const filter = state.filters.suppliers;
+  let items = [...Store.data.suppliers].sort(sortByDateTime);
+  if (filter !== "all") items = items.filter((s) => s.status === filter);
+
+  el.innerHTML = `
+    <div class="filter-row">
+      ${chip("all", "Tout", filter)}
+      ${Object.entries(SUPPLIER_STATUS).map(([k, v]) => chip(k, v, filter)).join("")}
+    </div>
+    ${items.length ? items.map(supplierCardHtml).join("") : emptyState("Aucun rendez-vous. Appuie sur + pour en ajouter.")}
+  `;
+  el.querySelectorAll(".chip").forEach((c) => {
+    c.addEventListener("click", () => {
+      state.filters.suppliers = c.dataset.value;
+      renderSuppliers();
+    });
+  });
+  bindCardActions(el, "suppliers");
+}
+
+/* ---------- Render: Tourism ---------- */
+
+function tourismCardHtml(t) {
+  const catLabel = TOURISM_CATS[t.category] || t.category;
+  return `
+    <div class="card ${t.visited ? "is-done" : ""}" data-id="${t.id}" data-collection="tourism">
+      <div class="card-row">
+        <input type="checkbox" class="done-checkbox" data-action="toggle-visited" ${t.visited ? "checked" : ""} />
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(t.name)}</div>
+          <div class="card-sub">${escapeHtml(t.city || "")}${t.address ? " · " + escapeHtml(t.address) : ""}</div>
+          ${t.notes ? `<div class="card-notes">${escapeHtml(t.notes)}</div>` : ""}
+          <div class="card-meta">
+            <span class="pill">${catLabel}</span>
+            <span class="pill prio-${t.priority}">Priorité ${PRIORITIES[t.priority] || t.priority}</span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderTourism() {
+  const el = document.getElementById("view-tourism");
+  const filter = state.filters.tourism;
+  let items = [...Store.data.tourism].sort((a, b) => (a.visited === b.visited ? 0 : a.visited ? 1 : -1));
+  if (filter !== "all") items = items.filter((t) => t.category === filter);
+
+  el.innerHTML = `
+    <div class="filter-row">
+      ${chip("all", "Tout", filter)}
+      ${Object.entries(TOURISM_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
+    </div>
+    ${items.length ? items.map(tourismCardHtml).join("") : emptyState("Aucun lieu. Appuie sur + pour en ajouter.")}
+  `;
+  el.querySelectorAll(".chip").forEach((c) => {
+    c.addEventListener("click", () => {
+      state.filters.tourism = c.dataset.value;
+      renderTourism();
+    });
+  });
+  bindCardActions(el, "tourism");
+}
+
+/* ---------- Render: Checklist ---------- */
+
+function checklistRowHtml(c) {
+  return `
+    <div class="card" data-id="${c.id}" data-collection="checklist">
+      <div class="card-row">
+        <input type="checkbox" class="done-checkbox" data-action="toggle-checked" ${c.done ? "checked" : ""} />
+        <div style="flex:1;">
+          <div class="card-title checklist-text ${c.done ? "is-done" : ""}">${escapeHtml(c.text)}</div>
+          <div class="card-meta"><span class="pill">${CHECKLIST_CATS[c.category] || c.category}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderChecklist() {
+  const el = document.getElementById("view-checklist");
+  const filter = state.filters.checklist;
+  let items = [...Store.data.checklist];
+  if (filter !== "all") items = items.filter((c) => c.category === filter);
+
+  el.innerHTML = `
+    <div class="filter-row">
+      ${chip("all", "Tout", filter)}
+      ${Object.entries(CHECKLIST_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
+    </div>
+    ${items.length ? items.map(checklistRowHtml).join("") : emptyState("Rien ici. Appuie sur + pour ajouter une tâche.")}
+  `;
+  el.querySelectorAll(".chip").forEach((c) => {
+    c.addEventListener("click", () => {
+      state.filters.checklist = c.dataset.value;
+      renderChecklist();
+    });
+  });
+  bindCardActions(el, "checklist");
+}
+
+/* ---------- Shared card actions ---------- */
+
+function bindCardActions(container, collection) {
+  container.querySelectorAll(".card").forEach((cardEl) => {
+    const id = cardEl.dataset.id;
+    const item = Store.data[collection].find((i) => i.id === id);
+    if (!item) return;
+
+    const toggleBox = cardEl.querySelector('[data-action="toggle-done"], [data-action="toggle-visited"], [data-action="toggle-checked"]');
+    if (toggleBox) {
+      toggleBox.addEventListener("change", () => {
+        if (collection === "itinerary") Store.updateItem(collection, id, { done: toggleBox.checked });
+        if (collection === "tourism") Store.updateItem(collection, id, { visited: toggleBox.checked });
+        if (collection === "checklist") Store.updateItem(collection, id, { done: toggleBox.checked });
+        render();
+      });
+    }
+    const editBtn = cardEl.querySelector('[data-action="edit"]');
+    if (editBtn) editBtn.addEventListener("click", () => openModal(collection, item));
+
+    const delBtn = cardEl.querySelector('[data-action="delete"]');
+    if (delBtn)
+      delBtn.addEventListener("click", () => {
+        if (confirm("Supprimer cet élément ?")) {
+          Store.removeItem(collection, id);
+          render();
+        }
+      });
+  });
+}
+
+/* ---------- Modal / forms ---------- */
+
+function openModal(collection, item = null) {
+  modalOverlay.hidden = false;
+  modalSheet.innerHTML = formHtml(collection, item);
+  modalSheet.querySelector("form").addEventListener("submit", (e) => handleFormSubmit(e, collection, item));
+  modalSheet.querySelector('[data-action="close"]').addEventListener("click", closeModal);
+  const cancelBtn = modalSheet.querySelector('[data-action="cancel"]');
+  if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+}
+
+function closeModal() {
+  modalOverlay.hidden = true;
+  modalSheet.innerHTML = "";
+}
+
+function formHtml(collection, item) {
+  const titles = {
+    itinerary: "étape d'itinéraire",
+    suppliers: "rendez-vous fournisseur",
+    tourism: "lieu à visiter",
+    checklist: "tâche",
+  };
+  const heading = item ? `Modifier ${titles[collection]}` : `Ajouter ${titles[collection]}`;
+
+  let fields = "";
+  if (collection === "itinerary") {
+    fields = `
+      <label>Titre</label>
+      <input type="text" name="title" class="full" required value="${escapeHtml(item?.title || "")}" />
+      <div class="form-grid">
+        <div><label>Date</label><input type="date" name="date" value="${item?.date || ""}" /></div>
+        <div><label>Heure</label><input type="time" name="time" value="${item?.time || ""}" /></div>
+        <div><label>Ville</label><input type="text" name="city" value="${escapeHtml(item?.city || "")}" /></div>
+      </div>
+      <label>Catégorie</label>
+      <select name="category">${selectOptions(ITINERARY_CATS, item?.category || "activite")}</select>
+      <label>Lieu / adresse</label>
+      <input type="text" name="location" value="${escapeHtml(item?.location || "")}" />
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "suppliers") {
+    fields = `
+      <label>Entreprise</label>
+      <input type="text" name="company" class="full" required value="${escapeHtml(item?.company || "")}" />
+      <div class="form-grid">
+        <div><label>Contact</label><input type="text" name="contact" value="${escapeHtml(item?.contact || "")}" /></div>
+        <div><label>Téléphone</label><input type="text" name="phone" value="${escapeHtml(item?.phone || "")}" /></div>
+        <div><label>Email</label><input type="email" name="email" value="${escapeHtml(item?.email || "")}" /></div>
+      </div>
+      <div class="form-grid">
+        <div><label>Date</label><input type="date" name="date" value="${item?.date || ""}" /></div>
+        <div><label>Heure</label><input type="time" name="time" value="${item?.time || ""}" /></div>
+        <div><label>Ville</label><input type="text" name="city" value="${escapeHtml(item?.city || "")}" /></div>
+      </div>
+      <label>Lieu (usine / showroom / adresse)</label>
+      <input type="text" name="location" value="${escapeHtml(item?.location || "")}" />
+      <label>Produits discutés</label>
+      <input type="text" name="products" value="${escapeHtml(item?.products || "")}" />
+      <label>Statut</label>
+      <select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "a_confirmer")}</select>
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "tourism") {
+    fields = `
+      <label>Nom du lieu</label>
+      <input type="text" name="name" class="full" required value="${escapeHtml(item?.name || "")}" />
+      <div class="form-grid">
+        <div><label>Ville</label><input type="text" name="city" value="${escapeHtml(item?.city || "")}" /></div>
+        <div><label>Catégorie</label><select name="category">${selectOptions(TOURISM_CATS, item?.category || "temple")}</select></div>
+        <div><label>Priorité</label><select name="priority">${selectOptions(PRIORITIES, item?.priority || "moyenne")}</select></div>
+      </div>
+      <label>Adresse</label>
+      <input type="text" name="address" value="${escapeHtml(item?.address || "")}" />
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "checklist") {
+    fields = `
+      <label>Tâche</label>
+      <input type="text" name="text" class="full" required value="${escapeHtml(item?.text || "")}" />
+      <label>Catégorie</label>
+      <select name="category">${selectOptions(CHECKLIST_CATS, item?.category || "general")}</select>
+    `;
+  }
+
+  return `
+    <div class="modal-header">
+      <h2>${heading}</h2>
+      <button class="ghost-btn" data-action="close" style="font-size:1.3rem;">✕</button>
+    </div>
+    <form>
+      ${fields}
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" data-action="cancel">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  `;
+}
+
+function selectOptions(map, current) {
+  return Object.entries(map)
+    .map(([k, v]) => `<option value="${k}" ${k === current ? "selected" : ""}>${v}</option>`)
+    .join("");
+}
+
+function handleFormSubmit(e, collection, existingItem) {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const patch = {};
+  for (const [k, v] of formData.entries()) patch[k] = v;
+
+  if (collection === "itinerary") patch.done = existingItem?.done || false;
+  if (collection === "tourism") patch.visited = existingItem?.visited || false;
+  if (collection === "checklist") patch.done = existingItem?.done || false;
+
+  if (existingItem) {
+    Store.updateItem(collection, existingItem.id, patch);
+  } else {
+    Store.addItem(collection, patch);
+  }
+  closeModal();
+  render();
+}
+
+/* ---------- FAB ---------- */
+
+function handleFabClick() {
+  if (state.tab === "dashboard") return;
+  openModal(state.tab);
+}
+
+/* ---------- Settings ---------- */
+
+function openSettings() {
+  modalOverlay.hidden = false;
+  const { trip } = Store.data;
+  modalSheet.innerHTML = `
+    <div class="modal-header">
+      <h2>⚙️ Réglages du voyage</h2>
+      <button class="ghost-btn" data-action="close" style="font-size:1.3rem;">✕</button>
+    </div>
+    <div class="settings-panel">
+      <form id="trip-form">
+        <label>Nom du voyage</label>
+        <input type="text" name="name" class="full" value="${escapeHtml(trip.name || "")}" />
+        <div class="form-grid">
+          <div><label>Date de départ</label><input type="date" name="startDate" value="${trip.startDate || ""}" /></div>
+          <div><label>Date de retour</label><input type="date" name="endDate" value="${trip.endDate || ""}" /></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; margin-bottom:14px;">Enregistrer</button>
+      </form>
+
+      <div class="settings-row">
+        <span>Thème sombre</span>
+        <input type="checkbox" id="theme-toggle" />
+      </div>
+
+      <hr style="border-color:var(--border); width:100%; margin:8px 0;" />
+
+      <button class="btn btn-secondary" id="export-btn">⬇️ Exporter mes données (JSON)</button>
+      <label class="btn btn-secondary" style="text-align:center; display:block;">
+        ⬆️ Importer des données
+        <input type="file" id="import-input" accept="application/json" style="display:none;" />
+      </label>
+      <button class="btn btn-danger-outline" id="reset-btn">🗑️ Réinitialiser toutes les données</button>
+    </div>
+  `;
+
+  modalSheet.querySelector('[data-action="close"]').addEventListener("click", closeModal);
+
+  modalSheet.querySelector("#trip-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    Store.data.trip = {
+      name: fd.get("name"),
+      startDate: fd.get("startDate"),
+      endDate: fd.get("endDate"),
+    };
+    Store.save();
+    closeModal();
+    render();
+  });
+
+  const themeToggle = modalSheet.querySelector("#theme-toggle");
+  themeToggle.checked = document.documentElement.dataset.theme === "dark";
+  themeToggle.addEventListener("change", () => {
+    const theme = themeToggle.checked ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("chinaTripTheme", theme);
+  });
+
+  modalSheet.querySelector("#export-btn").addEventListener("click", () => {
+    const blob = new Blob([Store.exportJSON()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "voyage-chine-pouch.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  modalSheet.querySelector("#import-input").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        Store.importJSON(reader.result);
+        closeModal();
+        render();
+        alert("Données importées avec succès.");
+      } catch (err) {
+        alert("Fichier invalide.");
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  modalSheet.querySelector("#reset-btn").addEventListener("click", () => {
+    if (confirm("Cela va supprimer toutes tes données et remettre les exemples. Continuer ?")) {
+      Store.reset();
+      closeModal();
+      render();
+    }
+  });
+}
+
+/* ---------- Render dispatcher ---------- */
+
+function render() {
+  renderDashboard();
+  renderItinerary();
+  renderSuppliers();
+  renderTourism();
+  renderChecklist();
+}
+
+/* ---------- Init ---------- */
+
+function init() {
+  const savedTheme = localStorage.getItem("chinaTripTheme");
+  if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+  document.querySelectorAll(".tab-btn").forEach((btn) => {
+    btn.addEventListener("click", () => setTab(btn.dataset.tab));
+  });
+
+  document.getElementById("fab").addEventListener("click", handleFabClick);
+  document.getElementById("settings-btn").addEventListener("click", openSettings);
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  render();
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
+}
+
+init();
