@@ -35,6 +35,10 @@ const TOURISM_CATS = {
   nature: "🏞️ Nature",
   shopping: "🛍️ Shopping",
   food: "🥟 Food",
+  drinks: "🧋 Boissons",
+  dessert: "🍪 Café & Dessert",
+  spa: "💆 Spa",
+  activite: "🎡 Activité",
   quartier: "🏘️ Quartier",
   musee: "🖼️ Musée",
 };
@@ -44,6 +48,8 @@ const PRIORITIES = { haute: "Haute", moyenne: "Moyenne", basse: "Basse" };
 const CHECKLIST_CATS = {
   admin: "📄 Admin",
   bagage: "🧳 Bagage",
+  app: "📱 Apps",
+  achats: "🛍️ Achats Chine",
   pouch: "🏷️ Pouch",
   general: "✅ Général",
 };
