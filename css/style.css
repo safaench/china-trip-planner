@@ -76,8 +76,8 @@ button {
 
 .app-title {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -89,16 +89,10 @@ button {
   letter-spacing: 0.2px;
 }
 
-.app-title .brand-chip {
-  background: transparent;
-  border: 1px solid rgba(253, 250, 245, 0.35);
-  color: var(--surface);
-  font-size: 0.66rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 3px 10px;
-  border-radius: 999px;
+.app-title .brand-logo {
+  height: 24px;
+  width: auto;
+  display: block;
 }
 
 .header-actions {
