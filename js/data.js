@@ -9,7 +9,7 @@ function uid() {
 function defaultData() {
   return {
     trip: {
-      name: "Voyage Chine — Pouch",
+      name: "China 🇨🇳 — Pouch",
       startDate: "",
       endDate: "",
     },
