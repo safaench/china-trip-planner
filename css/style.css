@@ -65,6 +65,8 @@ button {
   padding: 14px 16px calc(14px + env(safe-area-inset-top, 0px));
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
   box-shadow: var(--shadow);
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .app-header-row {
@@ -139,6 +141,8 @@ button {
   border-bottom: 1px solid var(--border);
   padding: 6px 8px;
   scrollbar-width: none;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .tabbar::-webkit-scrollbar {

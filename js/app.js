@@ -642,6 +642,17 @@ function render() {
       console.error(`Render error (${tabId}):`, e);
     }
   });
+  forceRepaint();
+}
+
+function forceRepaint() {
+  // Works around an iOS Safari bug where dynamically injected content
+  // inside a sticky-positioned layout sometimes doesn't get painted
+  // until something else forces a reflow.
+  if (!app) return;
+  app.style.display = "none";
+  void app.offsetHeight;
+  app.style.display = "";
 }
 
 /* ---------- Init ---------- */
