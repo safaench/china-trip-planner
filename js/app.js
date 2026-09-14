@@ -647,20 +647,19 @@ function render() {
 
 function forceRepaint() {
   // Works around an iOS Safari bug where dynamically injected content
-  // inside a sticky-positioned layout sometimes doesn't get painted
-  // until a later event (touch, scroll...) forces a reflow. A
-  // synchronous reflow during the same tick isn't enough — Safari only
-  // seems to commit the repaint on a later frame, so nudge a scroll-
-  // affecting style change across two animation frames.
-  if (!app) return;
-  const nudge = () => {
-    app.style.minHeight = app.offsetHeight + 1 + "px";
-    requestAnimationFrame(() => {
-      app.style.minHeight = "";
-    });
-  };
-  requestAnimationFrame(() => requestAnimationFrame(nudge));
-  setTimeout(nudge, 60);
+  // sometimes doesn't get painted until something forces a reflow.
+  // Style-only nudges (transform, min-height) turned out not to be
+  // enough — Safari can skip repainting them entirely. Actually
+  // detaching and reinserting the visible view into the DOM forces a
+  // real, guaranteed layout + paint pass.
+  const active = document.querySelector(".view.active");
+  if (active && active.parentNode) {
+    const parent = active.parentNode;
+    const next = active.nextSibling;
+    parent.removeChild(active);
+    if (next) parent.insertBefore(active, next);
+    else parent.appendChild(active);
+  }
 }
 
 /* ---------- Init ---------- */
