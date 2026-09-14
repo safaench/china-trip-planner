@@ -9,10 +9,16 @@ const state = {
   filters: {
     itinerary: "all",
     suppliers: "all",
-    tourism: "all",
+    tourismCity: "Guangzhou",
     checklist: "all",
   },
 };
+
+const TOURISM_CITIES = ["Guangzhou", "Shenzhen", "Hong Kong"];
+
+function cityBucket(city) {
+  return TOURISM_CITIES.includes(city) ? city : "Autres";
+}
 
 const ITINERARY_CATS = {
   vol: "✈️ Vol",
@@ -30,17 +36,17 @@ const SUPPLIER_STATUS = {
 };
 
 const TOURISM_CATS = {
-  temple: "⛩️ Temple",
-  monument: "🏛️ Monument",
-  nature: "🏞️ Nature",
-  shopping: "🛍️ Shopping",
-  food: "🥟 Food",
+  food: "🥟 Restos",
   drinks: "🧋 Boissons",
   dessert: "🍪 Café & Dessert",
+  activite: "🎡 Activités",
+  quartier: "🏘️ Quartiers",
+  nature: "🏞️ Nature",
+  monument: "🏛️ Monuments",
+  temple: "⛩️ Temples",
+  musee: "🖼️ Musées",
+  shopping: "🛍️ Shopping",
   spa: "💆 Spa",
-  activite: "🎡 Activité",
-  quartier: "🏘️ Quartier",
-  musee: "🖼️ Musée",
 };
 
 const PRIORITIES = { haute: "Haute", moyenne: "Moyenne", basse: "Basse" };
@@ -257,15 +263,18 @@ function renderSuppliers() {
 
 /* ---------- Render: Tourism ---------- */
 
-function tourismCardHtml(t) {
+function tourismCardHtml(t, hideCity) {
   const catLabel = TOURISM_CATS[t.category] || t.category;
+  const subParts = [];
+  if (!hideCity && t.city) subParts.push(escapeHtml(t.city));
+  if (t.address) subParts.push(escapeHtml(t.address));
   return `
     <div class="card ${t.visited ? "is-done" : ""}" data-id="${t.id}" data-collection="tourism">
       <div class="card-row">
         <input type="checkbox" class="done-checkbox" data-action="toggle-visited" ${t.visited ? "checked" : ""} />
         <div style="flex:1;">
           <div class="card-title">${escapeHtml(t.name)}</div>
-          <div class="card-sub">${escapeHtml(t.city || "")}${t.address ? " · " + escapeHtml(t.address) : ""}</div>
+          ${subParts.length ? `<div class="card-sub">${subParts.join(" · ")}</div>` : ""}
           ${t.notes ? `<div class="card-notes">${escapeHtml(t.notes)}</div>` : ""}
           <div class="card-meta">
             <span class="pill">${catLabel}</span>
@@ -282,20 +291,28 @@ function tourismCardHtml(t) {
 
 function renderTourism() {
   const el = document.getElementById("view-tourism");
-  const filter = state.filters.tourism;
-  let items = [...Store.data.tourism].sort((a, b) => (a.visited === b.visited ? 0 : a.visited ? 1 : -1));
-  if (filter !== "all") items = items.filter((t) => t.category === filter);
+  const city = state.filters.tourismCity;
+  const cityItems = Store.data.tourism.filter((t) => cityBucket(t.city) === city);
+  const hideCity = city !== "Autres";
+
+  let groupsHtml = "";
+  for (const catKey of Object.keys(TOURISM_CATS)) {
+    const group = cityItems
+      .filter((t) => t.category === catKey)
+      .sort((a, b) => (a.visited === b.visited ? 0 : a.visited ? 1 : -1));
+    if (!group.length) continue;
+    groupsHtml += `<div class="section-title">${TOURISM_CATS[catKey]}</div>${group.map((t) => tourismCardHtml(t, hideCity)).join("")}`;
+  }
 
   el.innerHTML = `
     <div class="filter-row">
-      ${chip("all", "Tout", filter)}
-      ${Object.entries(TOURISM_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
+      ${[...TOURISM_CITIES, "Autres"].map((c) => chip(c, c, city)).join("")}
     </div>
-    ${items.length ? items.map(tourismCardHtml).join("") : emptyState("Aucun lieu. Appuie sur + pour en ajouter.")}
+    ${cityItems.length ? groupsHtml : emptyState("Aucun lieu pour cette ville. Appuie sur + pour en ajouter.")}
   `;
   el.querySelectorAll(".chip").forEach((c) => {
     c.addEventListener("click", () => {
-      state.filters.tourism = c.dataset.value;
+      state.filters.tourismCity = c.dataset.value;
       renderTourism();
     });
   });
