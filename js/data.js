@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v1";
+const STORAGE_KEY = "chinaTripData_v2";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
