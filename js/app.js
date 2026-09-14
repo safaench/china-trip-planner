@@ -648,11 +648,19 @@ function render() {
 function forceRepaint() {
   // Works around an iOS Safari bug where dynamically injected content
   // inside a sticky-positioned layout sometimes doesn't get painted
-  // until something else forces a reflow.
+  // until a later event (touch, scroll...) forces a reflow. A
+  // synchronous reflow during the same tick isn't enough — Safari only
+  // seems to commit the repaint on a later frame, so nudge a scroll-
+  // affecting style change across two animation frames.
   if (!app) return;
-  app.style.display = "none";
-  void app.offsetHeight;
-  app.style.display = "";
+  const nudge = () => {
+    app.style.minHeight = app.offsetHeight + 1 + "px";
+    requestAnimationFrame(() => {
+      app.style.minHeight = "";
+    });
+  };
+  requestAnimationFrame(() => requestAnimationFrame(nudge));
+  setTimeout(nudge, 60);
 }
 
 /* ---------- Init ---------- */
@@ -700,3 +708,9 @@ try {
   }
   console.error("Init error:", e);
 }
+
+window.addEventListener("load", forceRepaint);
+window.addEventListener("pageshow", forceRepaint);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") forceRepaint();
+});

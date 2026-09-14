@@ -174,15 +174,19 @@ main {
   padding: 16px;
   max-width: 760px;
   margin: 0 auto;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .view {
   display: none;
-  animation: fadein 0.15s ease;
 }
 
 .view.active {
   display: block;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  animation: fadein 0.15s ease;
 }
 
 @keyframes fadein {
