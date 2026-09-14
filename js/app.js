@@ -626,17 +626,31 @@ function openSettings() {
 /* ---------- Render dispatcher ---------- */
 
 function render() {
-  renderDashboard();
-  renderItinerary();
-  renderSuppliers();
-  renderTourism();
-  renderChecklist();
+  const renderers = [
+    ["dashboard", renderDashboard],
+    ["itinerary", renderItinerary],
+    ["suppliers", renderSuppliers],
+    ["tourism", renderTourism],
+    ["checklist", renderChecklist],
+  ];
+  renderers.forEach(([tabId, fn]) => {
+    try {
+      fn();
+    } catch (e) {
+      const el = document.getElementById("view-" + tabId);
+      if (el) el.innerHTML = `<div class="empty-state">⚠️ Erreur d'affichage : ${escapeHtml(String(e?.message || e))}</div>`;
+      console.error(`Render error (${tabId}):`, e);
+    }
+  });
 }
 
 /* ---------- Init ---------- */
 
 function init() {
-  const savedTheme = localStorage.getItem("chinaTripTheme");
+  let savedTheme = null;
+  try {
+    savedTheme = localStorage.getItem("chinaTripTheme");
+  } catch (e) {}
   if (savedTheme) document.documentElement.dataset.theme = savedTheme;
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {
@@ -656,4 +670,22 @@ function init() {
   }
 }
 
-init();
+window.addEventListener("error", (e) => {
+  if (app && !app.dataset.jsErrorShown) {
+    app.dataset.jsErrorShown = "1";
+    const div = document.createElement("div");
+    div.className = "card";
+    div.style.borderColor = "var(--danger)";
+    div.innerHTML = `<div class="card-title">⚠️ Erreur JavaScript</div><div class="card-notes">${escapeHtml(e?.message || "Erreur inconnue")}</div>`;
+    app.prepend(div);
+  }
+});
+
+try {
+  init();
+} catch (e) {
+  if (app) {
+    app.innerHTML = `<div class="card" style="border-color:var(--danger);"><div class="card-title">⚠️ Erreur de chargement</div><div class="card-notes">${escapeHtml(String(e?.message || e))}</div></div>`;
+  }
+  console.error("Init error:", e);
+}
