@@ -1,30 +1,30 @@
 :root {
-  --red: #8a6a4a;
-  --red-dark: #6b4f36;
-  --gold-soft: #c9a876;
-  --bg: #f5efe6;
-  --surface: #fdfaf5;
-  --surface-2: #ece1d1;
-  --text: #3a2e22;
-  --text-muted: #8a7a68;
-  --border: #e2d5c2;
+  --red: #d6537b;
+  --red-dark: #b23a60;
+  --gold-soft: #f2a8c4;
+  --bg: #fdf1f5;
+  --surface: #fffbfc;
+  --surface-2: #f9dfe8;
+  --text: #47182b;
+  --text-muted: #a5738b;
+  --border: #f3d3e0;
   --success: #6b6a4a;
-  --warning: #8a6a4a;
-  --danger: #8a4a34;
-  --shadow: 0 1px 2px rgba(70, 55, 40, 0.06);
+  --warning: #a3496b;
+  --danger: #c23d5e;
+  --shadow: 0 1px 2px rgba(140, 40, 80, 0.07);
   --radius: 14px;
   --font-display: "Cormorant Garamond", Georgia, serif;
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: #26201a;
-  --surface: #322b22;
-  --surface-2: #3c3226;
-  --text: #f0e6d8;
-  --text-muted: #b8a58e;
-  --border: #4a3f30;
-  --gold-soft: #d9b98a;
+  --bg: #2a1420;
+  --surface: #351a29;
+  --surface-2: #402032;
+  --text: #fbe0ec;
+  --text-muted: #d59db5;
+  --border: #4a2438;
+  --gold-soft: #f0a8c8;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   color-scheme: dark;
 }
@@ -268,14 +268,14 @@ main {
   border: 1px solid var(--border);
 }
 
-.pill.status-a_confirmer { background: #ece1d1; color: #7a5a2c; border-color: #ddc9a8; }
-.pill.status-confirme { background: #e3ded0; color: #55503a; border-color: #cfc7ab; }
-.pill.status-termine { background: #e9e3da; color: #7a6a5c; border-color: #d9cfbf; }
-.pill.status-annule { background: #ecd9cf; color: #8a4a34; border-color: #ddbfaa; }
+.pill.status-a_confirmer { background: #fbe2ec; color: #a34a72; border-color: #f3c6db; }
+.pill.status-confirme { background: #e6dce3; color: #5c4a54; border-color: #d3c2cc; }
+.pill.status-termine { background: #ece4e7; color: #7a6d73; border-color: #ddd1d6; }
+.pill.status-annule { background: #f6cfdb; color: #9e2f56; border-color: #edabc4; }
 
-.pill.prio-haute { background: #ecd9cf; color: #8a4a34; border-color: #ddbfaa; }
-.pill.prio-moyenne { background: #ece1d1; color: #7a5a2c; border-color: #ddc9a8; }
-.pill.prio-basse { background: #e9e3da; color: #7a6a5c; border-color: #d9cfbf; }
+.pill.prio-haute { background: #f6cfdb; color: #9e2f56; border-color: #edabc4; }
+.pill.prio-moyenne { background: #fbe2ec; color: #a34a72; border-color: #f3c6db; }
+.pill.prio-basse { background: #ece4e7; color: #7a6d73; border-color: #ddd1d6; }
 
 .card-actions {
   display: flex;
@@ -373,7 +373,7 @@ main {
   color: var(--surface);
   border: none;
   font-size: 1.6rem;
-  box-shadow: 0 4px 14px rgba(70, 55, 40, 0.28);
+  box-shadow: 0 4px 14px rgba(178, 58, 96, 0.32);
   cursor: pointer;
   z-index: 18;
   display: flex;
@@ -417,7 +417,7 @@ main {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(20, 14, 10, 0.45);
+  background: rgba(35, 10, 22, 0.45);
   display: flex;
   align-items: flex-end;
   justify-content: center;

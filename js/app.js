@@ -83,6 +83,13 @@ function sortByDateTime(a, b) {
   return da.localeCompare(db);
 }
 
+function todayStr() {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
 /* ---------- Navigation ---------- */
 
 function setTab(tab) {
@@ -115,8 +122,12 @@ function renderDashboard() {
     else countdownText = `Voyage en cours / terminé (${trip.endDate ? "retour " + fmtDate(trip.endDate) : ""})`;
   }
 
+  const today = todayStr();
+  const todaysItinerary = [...itinerary]
+    .filter((i) => i.date === today)
+    .sort(sortByDateTime);
   const upcomingItinerary = [...itinerary]
-    .filter((i) => !i.done)
+    .filter((i) => !i.done && i.date > today)
     .sort(sortByDateTime)
     .slice(0, 3);
 
@@ -130,7 +141,7 @@ function renderDashboard() {
   const checklistDone = checklistItems.filter((c) => c.done).length;
 
   el.innerHTML = `
-    <div class="card" style="border-color: var(--gold); margin-bottom:18px;">
+    <div class="card" style="border-color: var(--gold-soft); margin-bottom:18px;">
       <div class="card-title" style="font-size:1.05rem;">${escapeHtml(trip.name || "Mon voyage en Chine")}</div>
       <div class="card-sub">${escapeHtml(countdownText)}</div>
     </div>
@@ -147,7 +158,7 @@ function renderDashboard() {
       </div>
       <div class="stat-card">
         <div class="stat-value">${itinerary.length}</div>
-        <div class="stat-label">Étapes d'itinéraire</div>
+        <div class="stat-label">Étapes du programme</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">${checklistDone}/${checklistItems.length}</div>
@@ -156,8 +167,13 @@ function renderDashboard() {
       </div>
     </div>
 
-    <div class="section-title">🗺️ Prochaines étapes</div>
-    ${upcomingItinerary.length ? upcomingItinerary.map(itineraryCardHtml).join("") : emptyState("Rien de planifié encore.")}
+    <div class="section-title">📅 Programme du jour</div>
+    ${todaysItinerary.length ? todaysItinerary.map((i) => itineraryCardHtml(i, true)).join("") : emptyState("Rien de prévu aujourd'hui.")}
+
+    ${!todaysItinerary.length && upcomingItinerary.length ? `
+      <div class="section-title">🗓️ Prochaines étapes</div>
+      ${upcomingItinerary.map((i) => itineraryCardHtml(i, false)).join("")}
+    ` : ""}
 
     <div class="section-title">🤝 Prochains rendez-vous fournisseurs</div>
     ${upcomingSuppliers.length ? upcomingSuppliers.map(supplierCardHtml).join("") : emptyState("Aucun rendez-vous planifié.")}
@@ -170,15 +186,19 @@ function emptyState(text) {
 
 /* ---------- Render: Itinerary ---------- */
 
-function itineraryCardHtml(item) {
+function itineraryCardHtml(item, hideDate) {
   const catLabel = ITINERARY_CATS[item.category] || item.category;
+  const subParts = [];
+  if (!hideDate) subParts.push(fmtDate(item.date));
+  if (item.time) subParts.push(item.time);
+  if (item.city) subParts.push(escapeHtml(item.city));
   return `
     <div class="card ${item.done ? "is-done" : ""}" data-id="${item.id}" data-collection="itinerary">
       <div class="card-row">
         <input type="checkbox" class="done-checkbox" data-action="toggle-done" ${item.done ? "checked" : ""} />
         <div style="flex:1;">
           <div class="card-title">${escapeHtml(item.title)}</div>
-          <div class="card-sub">${fmtDate(item.date)}${item.time ? " · " + item.time : ""}${item.city ? " · " + escapeHtml(item.city) : ""}</div>
+          ${subParts.length ? `<div class="card-sub">${subParts.join(" · ")}</div>` : ""}
           ${item.location ? `<div class="card-sub">📍 ${escapeHtml(item.location)}</div>` : ""}
           ${item.notes ? `<div class="card-notes">${escapeHtml(item.notes)}</div>` : ""}
           <div class="card-meta"><span class="pill cat-${item.category}">${catLabel}</span></div>
@@ -197,12 +217,30 @@ function renderItinerary() {
   let items = [...Store.data.itinerary].sort(sortByDateTime);
   if (filter !== "all") items = items.filter((i) => i.category === filter);
 
+  const dayGroups = [];
+  const byDate = new Map();
+  items.forEach((item) => {
+    const key = item.date || "";
+    if (!byDate.has(key)) {
+      byDate.set(key, []);
+      dayGroups.push(key);
+    }
+    byDate.get(key).push(item);
+  });
+
+  const calendarHtml = dayGroups
+    .map((key) => {
+      const dayLabel = key ? `📅 ${fmtDate(key)}` : "🗓️ Sans date";
+      return `<div class="section-title">${dayLabel}</div>${byDate.get(key).map((i) => itineraryCardHtml(i, true)).join("")}`;
+    })
+    .join("");
+
   el.innerHTML = `
     <div class="filter-row">
       ${chip("all", "Tout", filter)}
       ${Object.entries(ITINERARY_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
     </div>
-    ${items.length ? items.map(itineraryCardHtml).join("") : emptyState("Aucune étape. Appuie sur + pour en ajouter.")}
+    ${items.length ? calendarHtml : emptyState("Aucune étape. Appuie sur + pour en ajouter.")}
   `;
   el.querySelectorAll(".chip").forEach((c) => {
     c.addEventListener("click", () => {
@@ -422,7 +460,7 @@ function closeModal() {
 function formHtml(collection, item, defaultCategory = null) {
   const isAchats = collection === "checklist" && (item?.category || defaultCategory) === "achats";
   const titles = {
-    itinerary: "étape d'itinéraire",
+    itinerary: "étape du programme",
     suppliers: "rendez-vous fournisseur",
     tourism: "lieu à visiter",
     checklist: isAchats ? "achat" : "tâche",
