@@ -126,7 +126,8 @@ function renderDashboard() {
     .slice(0, 3);
 
   const visitedCount = tourism.filter((t) => t.visited).length;
-  const checklistDone = checklist.filter((c) => c.done).length;
+  const checklistItems = checklist.filter((c) => c.category !== "achats");
+  const checklistDone = checklistItems.filter((c) => c.done).length;
 
   el.innerHTML = `
     <div class="card" style="border-color: var(--gold); margin-bottom:18px;">
@@ -149,9 +150,9 @@ function renderDashboard() {
         <div class="stat-label">Étapes d'itinéraire</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">${checklistDone}/${checklist.length}</div>
+        <div class="stat-value">${checklistDone}/${checklistItems.length}</div>
         <div class="stat-label">Checklist complétée</div>
-        <div class="progress-bar"><div style="width:${checklist.length ? (checklistDone / checklist.length) * 100 : 0}%"></div></div>
+        <div class="progress-bar"><div style="width:${checklistItems.length ? (checklistDone / checklistItems.length) * 100 : 0}%"></div></div>
       </div>
     </div>
 
@@ -340,13 +341,14 @@ function checklistRowHtml(c) {
 function renderChecklist() {
   const el = document.getElementById("view-checklist");
   const filter = state.filters.checklist;
-  let items = [...Store.data.checklist];
+  const cats = Object.entries(CHECKLIST_CATS).filter(([k]) => k !== "achats");
+  let items = Store.data.checklist.filter((c) => c.category !== "achats");
   if (filter !== "all") items = items.filter((c) => c.category === filter);
 
   el.innerHTML = `
     <div class="filter-row">
       ${chip("all", "Tout", filter)}
-      ${Object.entries(CHECKLIST_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
+      ${cats.map(([k, v]) => chip(k, v, filter)).join("")}
     </div>
     ${items.length ? items.map(checklistRowHtml).join("") : emptyState("Rien ici. Appuie sur + pour ajouter une tâche.")}
   `;
@@ -356,6 +358,17 @@ function renderChecklist() {
       renderChecklist();
     });
   });
+  bindCardActions(el, "checklist");
+}
+
+function renderAchats() {
+  const el = document.getElementById("view-achats");
+  const items = Store.data.checklist.filter((c) => c.category === "achats");
+
+  el.innerHTML = items.length
+    ? items.map(checklistRowHtml).join("")
+    : emptyState("Rien ici. Appuie sur + pour ajouter un achat.");
+
   bindCardActions(el, "checklist");
 }
 
@@ -392,9 +405,9 @@ function bindCardActions(container, collection) {
 
 /* ---------- Modal / forms ---------- */
 
-function openModal(collection, item = null) {
+function openModal(collection, item = null, defaultCategory = null) {
   modalOverlay.hidden = false;
-  modalSheet.innerHTML = formHtml(collection, item);
+  modalSheet.innerHTML = formHtml(collection, item, defaultCategory);
   modalSheet.querySelector("form").addEventListener("submit", (e) => handleFormSubmit(e, collection, item));
   modalSheet.querySelector('[data-action="close"]').addEventListener("click", closeModal);
   const cancelBtn = modalSheet.querySelector('[data-action="cancel"]');
@@ -406,12 +419,13 @@ function closeModal() {
   modalSheet.innerHTML = "";
 }
 
-function formHtml(collection, item) {
+function formHtml(collection, item, defaultCategory = null) {
+  const isAchats = collection === "checklist" && (item?.category || defaultCategory) === "achats";
   const titles = {
     itinerary: "étape d'itinéraire",
     suppliers: "rendez-vous fournisseur",
     tourism: "lieu à visiter",
-    checklist: "tâche",
+    checklist: isAchats ? "achat" : "tâche",
   };
   const heading = item ? `Modifier ${titles[collection]}` : `Ajouter ${titles[collection]}`;
 
@@ -469,12 +483,22 @@ function formHtml(collection, item) {
       <label>Notes</label>
       <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
     `;
+  } else if (collection === "checklist" && isAchats) {
+    fields = `
+      <label>Article</label>
+      <input type="text" name="text" class="full" required value="${escapeHtml(item?.text || "")}" />
+      <input type="hidden" name="category" value="achats" />
+    `;
   } else if (collection === "checklist") {
+    const catsNoAchats = {};
+    Object.keys(CHECKLIST_CATS).forEach((k) => {
+      if (k !== "achats") catsNoAchats[k] = CHECKLIST_CATS[k];
+    });
     fields = `
       <label>Tâche</label>
       <input type="text" name="text" class="full" required value="${escapeHtml(item?.text || "")}" />
       <label>Catégorie</label>
-      <select name="category">${selectOptions(CHECKLIST_CATS, item?.category || "general")}</select>
+      <select name="category">${selectOptions(catsNoAchats, item?.category || "general")}</select>
     `;
   }
 
@@ -522,6 +546,10 @@ function handleFormSubmit(e, collection, existingItem) {
 
 function handleFabClick() {
   if (state.tab === "dashboard") return;
+  if (state.tab === "achats") {
+    openModal("checklist", null, "achats");
+    return;
+  }
   openModal(state.tab);
 }
 
@@ -632,6 +660,7 @@ function render() {
     ["suppliers", renderSuppliers],
     ["tourism", renderTourism],
     ["checklist", renderChecklist],
+    ["achats", renderAchats],
   ];
   renderers.forEach(([tabId, fn]) => {
     try {
