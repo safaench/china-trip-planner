@@ -676,19 +676,21 @@ function render() {
 
 function forceRepaint() {
   // Works around an iOS Safari bug where dynamically injected content
-  // sometimes doesn't get painted until something forces a reflow.
-  // Style-only nudges (transform, min-height) turned out not to be
-  // enough — Safari can skip repainting them entirely. Actually
-  // detaching and reinserting the visible view into the DOM forces a
-  // real, guaranteed layout + paint pass.
-  const active = document.querySelector(".view.active");
-  if (active && active.parentNode) {
-    const parent = active.parentNode;
-    const next = active.nextSibling;
-    parent.removeChild(active);
-    if (next) parent.insertBefore(active, next);
-    else parent.appendChild(active);
-  }
+  // has real layout (offsetHeight > 0, display:block) but never gets
+  // painted. Element-level nudges (transform, detach/reinsert) weren't
+  // enough. What DOES reliably fix it: opening the settings modal,
+  // which inserts a full-viewport position:fixed overlay. So mimic
+  // that exactly — insert then remove a full-viewport fixed layer to
+  // force Safari to recomposite the whole screen.
+  const nudge = document.createElement("div");
+  nudge.style.cssText = "position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.001);pointer-events:none;";
+  document.body.appendChild(nudge);
+  void nudge.offsetHeight;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      nudge.remove();
+    });
+  });
 }
 
 /* ---------- Init ---------- */
