@@ -10,8 +10,8 @@ function defaultData() {
   return {
     trip: {
       name: "China 🇨🇳 — Pouch",
-      startDate: "",
-      endDate: "",
+      startDate: "2026-09-25",
+      endDate: "2026-10-09",
     },
     itinerary: [],
     suppliers: [
@@ -155,8 +155,13 @@ function load() {
     const parsed = JSON.parse(raw);
     // merge shallow defaults in case of older schema
     const base = defaultData();
+    const savedTrip = parsed.trip || {};
     return {
-      trip: { ...base.trip, ...(parsed.trip || {}) },
+      trip: {
+        name: savedTrip.name || base.trip.name,
+        startDate: savedTrip.startDate || base.trip.startDate,
+        endDate: savedTrip.endDate || base.trip.endDate,
+      },
       itinerary: Array.isArray(parsed.itinerary) ? parsed.itinerary : base.itinerary,
       suppliers: Array.isArray(parsed.suppliers) ? parsed.suppliers : base.suppliers,
       tourism: Array.isArray(parsed.tourism) ? parsed.tourism : base.tourism,

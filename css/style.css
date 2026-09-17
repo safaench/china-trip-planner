@@ -12,7 +12,7 @@
   --warning: #a3496b;
   --danger: #c23d5e;
   --shadow: 0 1px 2px rgba(140, 40, 80, 0.07);
-  --radius: 14px;
+  --radius: 8px;
   --font-display: "Cormorant Garamond", Georgia, serif;
   color-scheme: light;
 }
@@ -154,7 +154,7 @@ button {
   background: transparent;
   color: var(--text-muted);
   padding: 8px 14px;
-  border-radius: 999px;
+  border-radius: 8px;
   font-size: 0.86rem;
   font-weight: 600;
   white-space: nowrap;
@@ -262,7 +262,7 @@ main {
   font-size: 0.72rem;
   font-weight: 600;
   padding: 3px 9px;
-  border-radius: 999px;
+  border-radius: 6px;
   background: var(--surface-2);
   color: var(--text-muted);
   border: 1px solid var(--border);
@@ -402,7 +402,7 @@ main {
   font-size: 0.78rem;
   font-weight: 600;
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: 8px;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -434,7 +434,7 @@ main {
   max-width: 760px;
   max-height: 92vh;
   overflow-y: auto;
-  border-radius: 20px 20px 0 0;
+  border-radius: 10px 10px 0 0;
   padding: 20px 18px calc(20px + env(safe-area-inset-bottom, 0px));
   animation: slideup 0.18s ease;
 }
@@ -480,7 +480,7 @@ select,
 textarea {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface-2);
   color: var(--text);
@@ -502,7 +502,7 @@ textarea {
 .btn {
   flex: 1;
   padding: 11px 14px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: none;
   font-weight: 700;
   font-size: 0.9rem;

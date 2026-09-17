@@ -90,6 +90,21 @@ function todayStr() {
   return `${d.getFullYear()}-${m}-${day}`;
 }
 
+function dateRange(startStr, endStr) {
+  const out = [];
+  const start = new Date(startStr + "T00:00:00");
+  const end = new Date(endStr + "T00:00:00");
+  if (isNaN(start) || isNaN(end) || start > end) return out;
+  const cur = new Date(start);
+  while (cur <= end) {
+    const m = String(cur.getMonth() + 1).padStart(2, "0");
+    const day = String(cur.getDate()).padStart(2, "0");
+    out.push(`${cur.getFullYear()}-${m}-${day}`);
+    cur.setDate(cur.getDate() + 1);
+  }
+  return out;
+}
+
 /* ---------- Navigation ---------- */
 
 function setTab(tab) {
@@ -217,30 +232,44 @@ function renderItinerary() {
   let items = [...Store.data.itinerary].sort(sortByDateTime);
   if (filter !== "all") items = items.filter((i) => i.category === filter);
 
-  const dayGroups = [];
   const byDate = new Map();
+  const noDateItems = [];
   items.forEach((item) => {
-    const key = item.date || "";
-    if (!byDate.has(key)) {
-      byDate.set(key, []);
-      dayGroups.push(key);
+    if (!item.date) {
+      noDateItems.push(item);
+      return;
     }
-    byDate.get(key).push(item);
+    if (!byDate.has(item.date)) byDate.set(item.date, []);
+    byDate.get(item.date).push(item);
   });
 
-  const calendarHtml = dayGroups
+  const { trip } = Store.data;
+  let dayKeys = dateRange(trip.startDate, trip.endDate);
+  if (!dayKeys.length) dayKeys = [...byDate.keys()].sort();
+  // include any dated items that happen to fall outside the trip range
+  [...byDate.keys()].forEach((k) => {
+    if (!dayKeys.includes(k)) dayKeys.push(k);
+  });
+  dayKeys.sort();
+
+  const calendarHtml = dayKeys
     .map((key) => {
-      const dayLabel = key ? `📅 ${fmtDate(key)}` : "🗓️ Sans date";
-      return `<div class="section-title">${dayLabel}</div>${byDate.get(key).map((i) => itineraryCardHtml(i, true)).join("")}`;
+      const dayItems = byDate.get(key) || [];
+      return `<div class="section-title">📅 ${fmtDate(key)}</div>${dayItems.length ? dayItems.map((i) => itineraryCardHtml(i, true)).join("") : emptyState("Rien de prévu ce jour.")}`;
     })
     .join("");
+
+  const noDateHtml = noDateItems.length
+    ? `<div class="section-title">🗓️ Sans date</div>${noDateItems.map((i) => itineraryCardHtml(i, true)).join("")}`
+    : "";
 
   el.innerHTML = `
     <div class="filter-row">
       ${chip("all", "Tout", filter)}
       ${Object.entries(ITINERARY_CATS).map(([k, v]) => chip(k, v, filter)).join("")}
     </div>
-    ${items.length ? calendarHtml : emptyState("Aucune étape. Appuie sur + pour en ajouter.")}
+    ${dayKeys.length ? calendarHtml : emptyState("Définis les dates du voyage dans les réglages pour voir le calendrier.")}
+    ${noDateHtml}
   `;
   el.querySelectorAll(".chip").forEach((c) => {
     c.addEventListener("click", () => {
