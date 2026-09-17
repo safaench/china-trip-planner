@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v2";
+const STORAGE_KEY = "chinaTripData_v3";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -16,22 +16,40 @@ function defaultData() {
     itinerary: [],
     suppliers: [
       {
-        id: uid(), company: "Fournisseur daim + cuir", contact: "", phone: "", email: "",
-        date: "", time: "", city: "", location: "",
-        products: "Daim, cuir", status: "a_confirmer",
-        notes: "Objectif voyage : valider un fournisseur fiable pour le daim et le cuir.",
+        id: uid(), company: "Sophia Chen (GBM)", contact: "Sophia Chen", phone: "", email: "",
+        date: "2026-09-27", time: "", city: "Guangzhou", location: "À demander à Sophia (transport hôtel-usine offert par elle)",
+        products: "Vegan Suede, daim kaki (couleur 144)", status: "a_confirmer",
+        notes: "Visite usine + présentation sample. 🟡 Heure à définir + demander adresse.",
       },
       {
-        id: uid(), company: "Agent de transit", contact: "", phone: "", email: "",
-        date: "", time: "", city: "", location: "",
-        products: "Transit / logistique export", status: "a_confirmer",
-        notes: "Objectif voyage : trouver un agent de transit.",
+        id: uid(), company: "Nina & Cindy", contact: "Nina & Cindy", phone: "", email: "",
+        date: "2026-09-28", time: "14:00–15:00", city: "Guangzhou", location: "À confirmer (rencontre café + visio atelier)",
+        products: "", status: "a_confirmer",
+        notes: "Présentation fournisseur + évaluation produit / capacités de production. 🟡 À rencontrer.",
       },
       {
-        id: uid(), company: "Agent de contrôle qualité", contact: "", phone: "", email: "",
-        date: "", time: "", city: "", location: "",
-        products: "Contrôle qualité", status: "a_confirmer",
-        notes: "Objectif voyage : trouver un agent de contrôle qualité fiable.",
+        id: uid(), company: "Jay", contact: "Jay Yuan", phone: "", email: "",
+        date: "2026-09-29", time: "11:00–12:00", city: "Guangzhou", location: "No. 36, Heyun Road, Jianggao Town, Baiyun area, Guangzhou city, Guangdong Province, China.",
+        products: "Cuir marron (daim noir selon satisfaction échantillon Robert)", status: "a_confirmer",
+        notes: "Présentation fournisseur + évaluation produit / capacités de production. 🟡 À rencontrer.",
+      },
+      {
+        id: uid(), company: "Aitana Liao (Market Union)", contact: "Aitana Liao", phone: "", email: "",
+        date: "", time: "", city: "Guangzhou", location: "Bureau Guangzhou — adresse à demander",
+        products: "", status: "a_confirmer",
+        notes: "Voir swatchs + discuter possibilités (bureau, pas l'usine de Yiwu). 🟡 En attente de réponse — date proposée entre le 25 et le 29 sept, pas encore confirmée.",
+      },
+      {
+        id: uid(), company: "Louis (Novafulfil)", contact: "Louis", phone: "", email: "",
+        date: "2026-10-04", time: "11:00–12:00", city: "Shenzhen", location: "Guangdong, Shenzhen, Longhua, Minzhi, Minzhi Community, 1970 Keji Yuan, Bldg 8, 6F, Room 610",
+        products: "", status: "confirme",
+        notes: "Visite / rencontre + évaluation avant sélection (fulfillment, QC, logistique). 🟢 Confirmé.",
+      },
+      {
+        id: uid(), company: "Djibril (Supply Chine)", contact: "Djibril", phone: "", email: "",
+        date: "", time: "21h/22h", city: "Guangzhou", location: "À déterminer",
+        products: "", status: "a_confirmer",
+        notes: "Dîner à planifier un soir. Discussion transit/fulfillment + QC — ⚠️ point de vigilance : conflit d'intérêt potentiel (même acteur... — note tronquée, à compléter). 🔴 Date non fixée — échange WhatsApp en cours (volumes/flux).",
       },
       {
         id: uid(), company: "Fournisseur cadeau miroir", contact: "", phone: "", email: "",
