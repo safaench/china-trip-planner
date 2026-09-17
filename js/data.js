@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v3";
+const STORAGE_KEY = "chinaTripData_v4";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -13,7 +13,36 @@ function defaultData() {
       startDate: "2026-09-25",
       endDate: "2026-10-09",
     },
-    itinerary: [],
+    itinerary: [
+      {
+        id: uid(), title: "Sophia Chen (GBM)", category: "rdv",
+        date: "2026-09-27", time: "", city: "Guangzhou",
+        location: "À demander à Sophia (transport hôtel-usine offert par elle)",
+        notes: "Visite usine + présentation sample (Vegan Suede, daim kaki). Heure à définir.",
+        done: false,
+      },
+      {
+        id: uid(), title: "Nina & Cindy", category: "rdv",
+        date: "2026-09-28", time: "14:00–15:00", city: "Guangzhou",
+        location: "À confirmer (rencontre café + visio atelier)",
+        notes: "Présentation fournisseur + évaluation produit / capacités de production.",
+        done: false,
+      },
+      {
+        id: uid(), title: "Jay (Jay Yuan)", category: "rdv",
+        date: "2026-09-29", time: "11:00–12:00", city: "Guangzhou",
+        location: "No. 36, Heyun Road, Jianggao Town, Baiyun area, Guangzhou city, Guangdong Province, China.",
+        notes: "Présentation fournisseur + évaluation produit / capacités de production (cuir marron).",
+        done: false,
+      },
+      {
+        id: uid(), title: "Louis (Novafulfil)", category: "rdv",
+        date: "2026-10-04", time: "11:00–12:00", city: "Shenzhen",
+        location: "Guangdong, Shenzhen, Longhua, Minzhi, Minzhi Community, 1970 Keji Yuan, Bldg 8, 6F, Room 610",
+        notes: "Visite / rencontre + évaluation avant sélection (fulfillment, QC, logistique). Confirmé.",
+        done: false,
+      },
+    ],
     suppliers: [
       {
         id: uid(), company: "Sophia Chen (GBM)", contact: "Sophia Chen", phone: "", email: "",

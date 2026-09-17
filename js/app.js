@@ -24,6 +24,7 @@ const ITINERARY_CATS = {
   vol: "✈️ Vol",
   hotel: "🏨 Hôtel",
   transport: "🚗 Transport",
+  rdv: "🤝 RDV Fournisseur",
   activite: "📍 Activité",
   repas: "🍽️ Repas",
 };
