@@ -36,6 +36,8 @@ const SUPPLIER_STATUS = {
   annule: "Annulé",
 };
 
+const FLIGHT_DIRECTIONS = { aller: "✈️ Aller", retour: "✈️ Retour" };
+
 const TOURISM_CATS = {
   food: "🥟 Restos",
   drinks: "🧋 Boissons",
@@ -370,7 +372,16 @@ function flightCardHtml(f) {
 function renderFlights() {
   const el = document.getElementById("view-flights");
   const items = [...Store.data.flights].sort(sortByDateTime);
-  el.innerHTML = items.length ? items.map(flightCardHtml).join("") : emptyState("Aucun vol. Appuie sur + pour en ajouter.");
+  const aller = items.filter((f) => f.direction !== "retour");
+  const retour = items.filter((f) => f.direction === "retour");
+
+  let html = "";
+  html += `<div class="section-title">${FLIGHT_DIRECTIONS.aller}</div>`;
+  html += aller.length ? aller.map(flightCardHtml).join("") : emptyState("Aucun vol aller. Appuie sur + pour en ajouter.");
+  html += `<div class="section-title">${FLIGHT_DIRECTIONS.retour}</div>`;
+  html += retour.length ? retour.map(flightCardHtml).join("") : emptyState("Aucun vol retour. Appuie sur + pour en ajouter.");
+
+  el.innerHTML = html;
   bindCardActions(el, "flights");
 }
 
@@ -696,6 +707,7 @@ function formHtml(collection, item, defaultCategory = null) {
       <label>Aéroport d'arrivée</label>
       <input type="text" name="toAirport" class="full" required value="${escapeHtml(item?.toAirport || "")}" />
       <div class="form-grid">
+        <div><label>Sens</label><select name="direction">${selectOptions(FLIGHT_DIRECTIONS, item?.direction || "aller")}</select></div>
         <div><label>Date départ</label><input type="date" name="date" value="${item?.date || ""}" /></div>
         <div><label>Heure départ</label><input type="time" name="time" value="${item?.time || ""}" /></div>
         <div><label>N° de vol</label><input type="text" name="flightNo" value="${escapeHtml(item?.flightNo || "")}" /></div>

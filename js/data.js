@@ -112,28 +112,28 @@ function defaultData() {
     ],
     flights: [
       {
-        id: uid(), flightNo: "EY 32", aircraft: "Airbus A380-800",
+        id: uid(), flightNo: "EY 32", direction: "aller", aircraft: "Airbus A380-800",
         date: "2026-09-24", time: "10:40", arrivalDate: "2026-09-24", arrivalTime: "19:35", duration: "06h55m",
         fromAirport: "Paris — Charles de Gaulle (CDG), Terminal 1", toAirport: "Abu Dhabi — Zayed International (AUH), Terminal A",
         bookingNo: "7S48V6", ticketNo: "607-2416865540", passengers: "Mrs Safae Nouch",
         status: "confirme", notes: "Nonstop. Bagages : 7 kg cabine / 25 kg enregistré.",
       },
       {
-        id: uid(), flightNo: "EY 870", aircraft: "Boeing 787-9",
+        id: uid(), flightNo: "EY 870", direction: "aller", aircraft: "Boeing 787-9",
         date: "2026-09-24", time: "21:10", arrivalDate: "2026-09-25", arrivalTime: "09:00", duration: "07h50m",
         fromAirport: "Abu Dhabi — Zayed International (AUH), Terminal 1", toAirport: "Hong Kong (HKG), Terminal International",
         bookingNo: "7S48V6", ticketNo: "607-2416865540", passengers: "Mrs Safae Nouch",
         status: "confirme", notes: "Nonstop. Bagages : 7 kg cabine / 25 kg enregistré. Arrivée à Hong Kong.",
       },
       {
-        id: uid(), flightNo: "EY 871", aircraft: "Boeing 787-9",
+        id: uid(), flightNo: "EY 871", direction: "retour", aircraft: "Boeing 787-9",
         date: "2026-10-09", time: "20:10", arrivalDate: "2026-10-10", arrivalTime: "00:25", duration: "08h15m",
         fromAirport: "Hong Kong (HKG), Terminal International", toAirport: "Abu Dhabi — Zayed International (AUH), Terminal A",
         bookingNo: "7S48V6", ticketNo: "607-2416865540", passengers: "Mrs Safae Nouch",
         status: "confirme", notes: "Nonstop. Bagages : 7 kg cabine / 25 kg enregistré. Départ de Hong Kong.",
       },
       {
-        id: uid(), flightNo: "EY 31", aircraft: "Airbus A380-800",
+        id: uid(), flightNo: "EY 31", direction: "retour", aircraft: "Airbus A380-800",
         date: "2026-10-10", time: "02:35", arrivalDate: "2026-10-10", arrivalTime: "07:55", duration: "07h20m",
         fromAirport: "Abu Dhabi — Zayed International (AUH), Terminal A", toAirport: "Paris — Charles de Gaulle (CDG), Terminal 1",
         bookingNo: "7S48V6", ticketNo: "607-2416865540", passengers: "Mrs Safae Nouch",
