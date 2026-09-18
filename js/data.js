@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v4";
+const STORAGE_KEY = "chinaTripData_v5";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -147,6 +147,13 @@ function defaultData() {
         gate: "Portique 4A", bookingNo: "1688902089775966", ticketNo: "EB58330527",
         passengers: "Harrou Amal — Classe Business, Voiture 16, siège 003A (billet émis)\nNOUCH SAFAE — Classe Business, Voiture 16, siège 003F (billet émis)",
         status: "confirme", notes: "",
+      },
+      {
+        id: uid(), trainNo: "C8017", date: "2026-09-29", time: "15:00", duration: "58 min",
+        fromStation: "Guangzhoudong (Guangzhou East · 广州东)", toStation: "Shenzhen (深圳)",
+        gate: "Waiting room 1", bookingNo: "1688902089802681", ticketNo: "EB69882587",
+        passengers: "Harrou Amal — 1ère classe, Voiture 01 (billet émis)\nNOUCH SAFAE — 1ère classe, Voiture 01 (billet émis)",
+        status: "confirme", notes: "Tous les sièges sont adjacents. Total payé : 27,44 €. (Numéros de sièges non visibles sur la capture.)",
       },
     ],
     tourism: [
