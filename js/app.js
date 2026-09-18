@@ -331,6 +331,49 @@ function renderHotels() {
   bindCardActions(el, "hotels");
 }
 
+/* ---------- Render: Flights ---------- */
+
+function flightCardHtml(f) {
+  const depParts = [fmtDate(f.date)];
+  if (f.time) depParts.push(f.time);
+  const arrParts = [];
+  if (f.arrivalDate) arrParts.push(fmtDate(f.arrivalDate));
+  if (f.arrivalTime) arrParts.push(f.arrivalTime);
+  const metaParts = [];
+  if (f.flightNo) metaParts.push(`Vol ${escapeHtml(f.flightNo)}`);
+  if (f.duration) metaParts.push(f.duration);
+  if (f.aircraft) metaParts.push(escapeHtml(f.aircraft));
+  const bookingParts = [];
+  if (f.bookingNo) bookingParts.push(`Référence : ${escapeHtml(f.bookingNo)}`);
+  if (f.ticketNo) bookingParts.push(`N° billet : ${escapeHtml(f.ticketNo)}`);
+  return `
+    <div class="card" data-id="${f.id}" data-collection="flights">
+      <div class="card-row">
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(f.fromAirport)} → ${escapeHtml(f.toAirport)}</div>
+          <div class="card-sub">Départ : ${depParts.join(" · ")}</div>
+          ${arrParts.length ? `<div class="card-sub">Arrivée : ${arrParts.join(" · ")}</div>` : ""}
+          ${metaParts.length ? `<div class="card-sub">${metaParts.join(" · ")}</div>` : ""}
+          ${bookingParts.length ? `<div class="card-notes">${bookingParts.join(" · ")}</div>` : ""}
+          ${f.passengers ? `<div class="card-notes">👤 ${escapeHtml(f.passengers)}</div>` : ""}
+          ${f.notes ? `<div class="card-notes">${escapeHtml(f.notes)}</div>` : ""}
+          <div class="card-meta"><span class="pill status-${f.status}">${SUPPLIER_STATUS[f.status] || f.status}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderFlights() {
+  const el = document.getElementById("view-flights");
+  const items = [...Store.data.flights].sort(sortByDateTime);
+  el.innerHTML = items.length ? items.map(flightCardHtml).join("") : emptyState("Aucun vol. Appuie sur + pour en ajouter.");
+  bindCardActions(el, "flights");
+}
+
 /* ---------- Render: Trains ---------- */
 
 function trainCardHtml(t) {
@@ -576,6 +619,7 @@ function formHtml(collection, item, defaultCategory = null) {
     itinerary: "étape du programme",
     suppliers: "rendez-vous fournisseur",
     hotels: "hôtel",
+    flights: "vol",
     trains: "trajet en train",
     tourism: "lieu à visiter",
     checklist: isAchats ? "achat" : "tâche",
@@ -642,6 +686,34 @@ function formHtml(collection, item, defaultCategory = null) {
         <div><label>Prix payé</label><input type="text" name="price" value="${escapeHtml(item?.price || "")}" /></div>
         <div><label>Statut</label><select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "confirme")}</select></div>
       </div>
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "flights") {
+    fields = `
+      <label>Aéroport de départ</label>
+      <input type="text" name="fromAirport" class="full" required value="${escapeHtml(item?.fromAirport || "")}" />
+      <label>Aéroport d'arrivée</label>
+      <input type="text" name="toAirport" class="full" required value="${escapeHtml(item?.toAirport || "")}" />
+      <div class="form-grid">
+        <div><label>Date départ</label><input type="date" name="date" value="${item?.date || ""}" /></div>
+        <div><label>Heure départ</label><input type="time" name="time" value="${item?.time || ""}" /></div>
+        <div><label>N° de vol</label><input type="text" name="flightNo" value="${escapeHtml(item?.flightNo || "")}" /></div>
+      </div>
+      <div class="form-grid">
+        <div><label>Date arrivée</label><input type="date" name="arrivalDate" value="${item?.arrivalDate || ""}" /></div>
+        <div><label>Heure arrivée</label><input type="time" name="arrivalTime" value="${item?.arrivalTime || ""}" /></div>
+        <div><label>Durée</label><input type="text" name="duration" value="${escapeHtml(item?.duration || "")}" /></div>
+      </div>
+      <label>Avion</label>
+      <input type="text" name="aircraft" value="${escapeHtml(item?.aircraft || "")}" />
+      <div class="form-grid">
+        <div><label>Référence (PNR)</label><input type="text" name="bookingNo" value="${escapeHtml(item?.bookingNo || "")}" /></div>
+        <div><label>N° billet</label><input type="text" name="ticketNo" value="${escapeHtml(item?.ticketNo || "")}" /></div>
+        <div><label>Statut</label><select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "confirme")}</select></div>
+      </div>
+      <label>Passagers</label>
+      <input type="text" name="passengers" value="${escapeHtml(item?.passengers || "")}" />
       <label>Notes</label>
       <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
     `;
@@ -860,6 +932,7 @@ function render() {
     ["itinerary", renderItinerary],
     ["suppliers", renderSuppliers],
     ["hotels", renderHotels],
+    ["flights", renderFlights],
     ["trains", renderTrains],
     ["tourism", renderTourism],
     ["checklist", renderChecklist],
