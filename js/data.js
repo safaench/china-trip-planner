@@ -87,6 +87,29 @@ function defaultData() {
         notes: "Objectif voyage : valider un fournisseur pour le cadeau miroir.",
       },
     ],
+    hotels: [
+      {
+        id: uid(), name: "Paco Hotel (Guangzhou Tianhebei Shuiyin Road)", nameLocal: "柏高酒店(广州天河城购物中心水荫路店)",
+        city: "Guangzhou", checkIn: "2026-09-25", checkOut: "2026-09-29",
+        room: "", address: "Xingguang Yingjing Plaza, No. 119 Shuiyin Road, Yuexiu, Guangzhou",
+        bookingNo: "1688900535733406", price: "180,24 €", status: "confirme",
+        notes: "Payé — annulation gratuite avant 18:00 le 24 sept. 2026 (heure locale), ensuite frais de 45,06 €. Enregistrement après 14:00, départ avant 14:00.",
+      },
+      {
+        id: uid(), name: "Shenzhen Moshiyaju Hotel (Luohu Mixc Branch)", nameLocal: "陌上雅居酒店(深圳罗湖东门老街店)",
+        city: "Shenzhen", checkIn: "2026-09-29", checkOut: "2026-10-04",
+        room: "Chambre Double Luxueuse — 2 lits simples", address: "",
+        bookingNo: "", price: "", status: "confirme",
+        notes: "Enregistrement après 14:00, départ avant 12:00. Repas non inclus.",
+      },
+      {
+        id: uid(), name: "Nina Hotel Kowloon East", nameLocal: "九龍東如心酒店",
+        city: "Hong Kong", checkIn: "2026-10-05", checkOut: "2026-10-09",
+        room: "Chambre Supérieure — 1 lit queen size ou 2 lits simples", address: "",
+        bookingNo: "", price: "", status: "confirme",
+        notes: "Enregistrement après 14:00, départ avant 12:00. Repas non inclus.",
+      },
+    ],
     tourism: [
       // --- Food ---
       { id: uid(), name: "Info — Halal", city: "", category: "food", priority: "moyenne", visited: false, address: "", notes: "Halal se dit 清真 (qīngzhēn) en chinois — utile pour repérer les restaurants." },
@@ -211,6 +234,7 @@ function load() {
       },
       itinerary: Array.isArray(parsed.itinerary) ? parsed.itinerary : base.itinerary,
       suppliers: Array.isArray(parsed.suppliers) ? parsed.suppliers : base.suppliers,
+      hotels: Array.isArray(parsed.hotels) ? parsed.hotels : base.hotels,
       tourism: Array.isArray(parsed.tourism) ? parsed.tourism : base.tourism,
       checklist: Array.isArray(parsed.checklist) ? parsed.checklist : base.checklist,
     };

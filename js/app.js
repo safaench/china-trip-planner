@@ -285,6 +285,52 @@ function chip(value, label, current) {
   return `<button class="chip ${current === value ? "active" : ""}" data-value="${value}">${label}</button>`;
 }
 
+/* ---------- Render: Hotels ---------- */
+
+function nightsBetween(inStr, outStr) {
+  if (!inStr || !outStr) return null;
+  const a = new Date(inStr + "T00:00:00");
+  const b = new Date(outStr + "T00:00:00");
+  if (isNaN(a) || isNaN(b)) return null;
+  return Math.round((b - a) / (1000 * 60 * 60 * 24));
+}
+
+function hotelCardHtml(h) {
+  const nights = nightsBetween(h.checkIn, h.checkOut);
+  const stayParts = [`${fmtDate(h.checkIn)} → ${fmtDate(h.checkOut)}`];
+  if (nights) stayParts.push(`${nights} nuit${nights > 1 ? "s" : ""}`);
+  if (h.city) stayParts.push(escapeHtml(h.city));
+  const bookingParts = [];
+  if (h.bookingNo) bookingParts.push(`N° réservation : ${escapeHtml(h.bookingNo)}`);
+  if (h.price) bookingParts.push(`Payé : ${escapeHtml(h.price)}`);
+  return `
+    <div class="card" data-id="${h.id}" data-collection="hotels">
+      <div class="card-row">
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(h.name)}</div>
+          ${h.nameLocal ? `<div class="card-sub">${escapeHtml(h.nameLocal)}</div>` : ""}
+          <div class="card-sub">${stayParts.join(" · ")}</div>
+          ${h.room ? `<div class="card-sub">🛏️ ${escapeHtml(h.room)}</div>` : ""}
+          ${h.address ? `<div class="card-sub">📍 ${escapeHtml(h.address)}</div>` : ""}
+          ${bookingParts.length ? `<div class="card-notes">${bookingParts.join(" · ")}</div>` : ""}
+          ${h.notes ? `<div class="card-notes">${escapeHtml(h.notes)}</div>` : ""}
+          <div class="card-meta"><span class="pill status-${h.status}">${SUPPLIER_STATUS[h.status] || h.status}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderHotels() {
+  const el = document.getElementById("view-hotels");
+  const items = [...Store.data.hotels].sort((a, b) => (a.checkIn || "9999").localeCompare(b.checkIn || "9999"));
+  el.innerHTML = items.length ? items.map(hotelCardHtml).join("") : emptyState("Aucun hôtel. Appuie sur + pour en ajouter.");
+  bindCardActions(el, "hotels");
+}
+
 /* ---------- Render: Suppliers ---------- */
 
 function supplierCardHtml(s) {
@@ -492,6 +538,7 @@ function formHtml(collection, item, defaultCategory = null) {
   const titles = {
     itinerary: "étape du programme",
     suppliers: "rendez-vous fournisseur",
+    hotels: "hôtel",
     tourism: "lieu à visiter",
     checklist: isAchats ? "achat" : "tâche",
   };
@@ -534,6 +581,29 @@ function formHtml(collection, item, defaultCategory = null) {
       <input type="text" name="products" value="${escapeHtml(item?.products || "")}" />
       <label>Statut</label>
       <select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "a_confirmer")}</select>
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "hotels") {
+    fields = `
+      <label>Nom de l'hôtel</label>
+      <input type="text" name="name" class="full" required value="${escapeHtml(item?.name || "")}" />
+      <label>Nom local (chinois)</label>
+      <input type="text" name="nameLocal" class="full" value="${escapeHtml(item?.nameLocal || "")}" />
+      <div class="form-grid">
+        <div><label>Arrivée</label><input type="date" name="checkIn" value="${item?.checkIn || ""}" /></div>
+        <div><label>Départ</label><input type="date" name="checkOut" value="${item?.checkOut || ""}" /></div>
+        <div><label>Ville</label><input type="text" name="city" value="${escapeHtml(item?.city || "")}" /></div>
+      </div>
+      <label>Type de chambre</label>
+      <input type="text" name="room" value="${escapeHtml(item?.room || "")}" />
+      <label>Adresse</label>
+      <input type="text" name="address" value="${escapeHtml(item?.address || "")}" />
+      <div class="form-grid">
+        <div><label>N° réservation</label><input type="text" name="bookingNo" value="${escapeHtml(item?.bookingNo || "")}" /></div>
+        <div><label>Prix payé</label><input type="text" name="price" value="${escapeHtml(item?.price || "")}" /></div>
+        <div><label>Statut</label><select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "confirme")}</select></div>
+      </div>
       <label>Notes</label>
       <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
     `;
@@ -726,6 +796,7 @@ function render() {
     ["dashboard", renderDashboard],
     ["itinerary", renderItinerary],
     ["suppliers", renderSuppliers],
+    ["hotels", renderHotels],
     ["tourism", renderTourism],
     ["checklist", renderChecklist],
     ["achats", renderAchats],
