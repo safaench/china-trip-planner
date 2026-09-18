@@ -331,6 +331,43 @@ function renderHotels() {
   bindCardActions(el, "hotels");
 }
 
+/* ---------- Render: Trains ---------- */
+
+function trainCardHtml(t) {
+  const subParts = [fmtDate(t.date)];
+  if (t.time) subParts.push(t.time);
+  if (t.duration) subParts.push(t.duration);
+  if (t.trainNo) subParts.push(`Train ${escapeHtml(t.trainNo)}`);
+  const metaParts = [];
+  if (t.gate) metaParts.push(`Porte : ${escapeHtml(t.gate)}`);
+  if (t.bookingNo) metaParts.push(`Réservation n° ${escapeHtml(t.bookingNo)}`);
+  if (t.ticketNo) metaParts.push(`Retrait billets : ${escapeHtml(t.ticketNo)}`);
+  return `
+    <div class="card" data-id="${t.id}" data-collection="trains">
+      <div class="card-row">
+        <div style="flex:1;">
+          <div class="card-title">${escapeHtml(t.fromStation)} → ${escapeHtml(t.toStation)}</div>
+          <div class="card-sub">${subParts.join(" · ")}</div>
+          ${metaParts.length ? `<div class="card-notes">${metaParts.join(" · ")}</div>` : ""}
+          ${t.passengers ? `<div class="card-notes">${escapeHtml(t.passengers)}</div>` : ""}
+          ${t.notes ? `<div class="card-notes">${escapeHtml(t.notes)}</div>` : ""}
+          <div class="card-meta"><span class="pill status-${t.status}">${SUPPLIER_STATUS[t.status] || t.status}</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="ghost-btn" data-action="edit">✏️</button>
+          <button class="ghost-btn" data-action="delete">🗑️</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderTrains() {
+  const el = document.getElementById("view-trains");
+  const items = [...Store.data.trains].sort(sortByDateTime);
+  el.innerHTML = items.length ? items.map(trainCardHtml).join("") : emptyState("Aucun trajet en train. Appuie sur + pour en ajouter.");
+  bindCardActions(el, "trains");
+}
+
 /* ---------- Render: Suppliers ---------- */
 
 function supplierCardHtml(s) {
@@ -539,6 +576,7 @@ function formHtml(collection, item, defaultCategory = null) {
     itinerary: "étape du programme",
     suppliers: "rendez-vous fournisseur",
     hotels: "hôtel",
+    trains: "trajet en train",
     tourism: "lieu à visiter",
     checklist: isAchats ? "achat" : "tâche",
   };
@@ -604,6 +642,31 @@ function formHtml(collection, item, defaultCategory = null) {
         <div><label>Prix payé</label><input type="text" name="price" value="${escapeHtml(item?.price || "")}" /></div>
         <div><label>Statut</label><select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "confirme")}</select></div>
       </div>
+      <label>Notes</label>
+      <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
+    `;
+  } else if (collection === "trains") {
+    fields = `
+      <div class="form-grid">
+        <div><label>Date</label><input type="date" name="date" value="${item?.date || ""}" /></div>
+        <div><label>Heure départ</label><input type="time" name="time" value="${item?.time || ""}" /></div>
+        <div><label>Durée</label><input type="text" name="duration" value="${escapeHtml(item?.duration || "")}" /></div>
+      </div>
+      <label>Gare de départ</label>
+      <input type="text" name="fromStation" class="full" required value="${escapeHtml(item?.fromStation || "")}" />
+      <label>Gare d'arrivée</label>
+      <input type="text" name="toStation" class="full" required value="${escapeHtml(item?.toStation || "")}" />
+      <div class="form-grid">
+        <div><label>N° de train</label><input type="text" name="trainNo" value="${escapeHtml(item?.trainNo || "")}" /></div>
+        <div><label>Porte</label><input type="text" name="gate" value="${escapeHtml(item?.gate || "")}" /></div>
+        <div><label>Statut</label><select name="status">${selectOptions(SUPPLIER_STATUS, item?.status || "confirme")}</select></div>
+      </div>
+      <div class="form-grid">
+        <div><label>N° réservation</label><input type="text" name="bookingNo" value="${escapeHtml(item?.bookingNo || "")}" /></div>
+        <div><label>N° retrait billets</label><input type="text" name="ticketNo" value="${escapeHtml(item?.ticketNo || "")}" /></div>
+      </div>
+      <label>Passagers</label>
+      <textarea name="passengers">${escapeHtml(item?.passengers || "")}</textarea>
       <label>Notes</label>
       <textarea name="notes">${escapeHtml(item?.notes || "")}</textarea>
     `;
@@ -797,6 +860,7 @@ function render() {
     ["itinerary", renderItinerary],
     ["suppliers", renderSuppliers],
     ["hotels", renderHotels],
+    ["trains", renderTrains],
     ["tourism", renderTourism],
     ["checklist", renderChecklist],
     ["achats", renderAchats],

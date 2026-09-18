@@ -110,6 +110,15 @@ function defaultData() {
         notes: "Enregistrement après 14:00, départ avant 12:00. Repas non inclus.",
       },
     ],
+    trains: [
+      {
+        id: uid(), trainNo: "G6526", date: "2026-09-25", time: "17:00", duration: "48 min",
+        fromStation: "Hong Kong West Kowloon (香港西九龙)", toStation: "Guangzhounan (Guangzhou Sud · 广州南)",
+        gate: "Portique 4A", bookingNo: "1688902089775966", ticketNo: "EB58330527",
+        passengers: "Harrou Amal — Classe Business, Voiture 16, siège 003A (billet émis)\nNOUCH SAFAE — Classe Business, Voiture 16, siège 003F (billet émis)",
+        status: "confirme", notes: "",
+      },
+    ],
     tourism: [
       // --- Food ---
       { id: uid(), name: "Info — Halal", city: "", category: "food", priority: "moyenne", visited: false, address: "", notes: "Halal se dit 清真 (qīngzhēn) en chinois — utile pour repérer les restaurants." },
@@ -235,6 +244,7 @@ function load() {
       itinerary: Array.isArray(parsed.itinerary) ? parsed.itinerary : base.itinerary,
       suppliers: Array.isArray(parsed.suppliers) ? parsed.suppliers : base.suppliers,
       hotels: Array.isArray(parsed.hotels) ? parsed.hotels : base.hotels,
+      trains: Array.isArray(parsed.trains) ? parsed.trains : base.trains,
       tourism: Array.isArray(parsed.tourism) ? parsed.tourism : base.tourism,
       checklist: Array.isArray(parsed.checklist) ? parsed.checklist : base.checklist,
     };
