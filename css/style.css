@@ -42,7 +42,7 @@ body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "ZCOOL XiaoWei", "Quicksand", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   padding-bottom: 84px;
 }
