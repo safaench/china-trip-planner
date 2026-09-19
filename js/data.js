@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v9";
+const STORAGE_KEY = "chinaTripData_v10";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -58,7 +58,6 @@ function defaultData() {
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-27", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🛍️ Liuhua Wholesale Market", category: "activite", date: "2026-09-27", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–12h30.", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-27", time: "12:30", city: "Guangzhou", location: "", notes: "12h30–13h30.", done: false },
-      { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza", category: "activite", date: "2026-09-27", time: "13:30", city: "Guangzhou", location: "", notes: "13h30–15h00.", done: false },
       { id: uid(), title: "🍽️ Dîner avec Sophia Chen (GBM)", category: "repas", date: "2026-09-27", time: "18:30", city: "Guangzhou", location: "", notes: "Après la visite usine, retour à Guangzhou pour dîner ensemble.", done: false },
       { id: uid(), title: "🏋️ Séance sport #2", category: "sport", date: "2026-09-28", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-28", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
@@ -70,7 +69,7 @@ function defaultData() {
       { id: uid(), title: "🍽️ Dîner — Dicos / Burger Plus", category: "repas", date: "2026-09-28", time: "20:00", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-29", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-29", time: "12:00", city: "Guangzhou", location: "", notes: "12h00–13h30.", done: false },
-      { id: uid(), title: "🛍️ Dernier passage marchés — selon les besoins restants", category: "activite", date: "2026-09-29", time: "13:30", city: "Guangzhou", location: "", notes: "13h30–15h00.", done: false },
+      { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza", category: "activite", date: "2026-09-29", time: "13:30", city: "Guangzhou", location: "", notes: "13h30–15h00. Déplacé du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
       { id: uid(), title: "🏨 Retour hôtel + récupération des bagages", category: "activite", date: "2026-09-29", time: "15:00", city: "Guangzhou", location: "", notes: "15h00–16h00.", done: false },
       { id: uid(), title: "🚄 Arrivée Guangzhou → Shenzhen + trajet jusqu'à l'hôtel", category: "transport", date: "2026-09-29", time: "17:00", city: "Shenzhen", location: "", notes: "Fin d'après-midi. Train C8017 — voir l'onglet Trains pour le détail.", done: false },
       { id: uid(), title: "🏨 Check-in + installation", category: "activite", date: "2026-09-29", time: "18:30", city: "Shenzhen", location: "", notes: "Soir.", done: false },
