@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v7";
+const STORAGE_KEY = "chinaTripData_v8";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -16,9 +16,9 @@ function defaultData() {
     itinerary: [
       {
         id: uid(), title: "Sophia Chen (GBM)", category: "rdv",
-        date: "2026-09-27", time: "", city: "Guangzhou",
-        location: "À demander à Sophia (transport hôtel-usine offert par elle)",
-        notes: "Visite usine + présentation sample (Vegan Suede, daim kaki). Heure à définir.",
+        date: "2026-09-27", time: "14:00–16:00", city: "Guangzhou",
+        location: "Pickup à l'hôtel par Sophia à 14h00 (transport hôtel-usine offert par elle)",
+        notes: "Pickup 14h00 → arrivée usine ~15h00 → visite usine (~1h) + présentation sample (Vegan Suede, daim kaki). Retour à Guangzhou et dîner ensemble après la visite.",
         done: false,
       },
       {
@@ -59,7 +59,7 @@ function defaultData() {
       { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza", category: "activite", date: "2026-09-27", time: "13:30", city: "Guangzhou", location: "", notes: "13h30–15h00.", done: false },
       { id: uid(), title: "⌚ Guangzhou Watch Market", category: "activite", date: "2026-09-27", time: "15:00", city: "Guangzhou", location: "", notes: "15h00–16h00.", done: false },
       { id: uid(), title: "⌚ Second-Hand Luxury Watch Market", category: "activite", date: "2026-09-27", time: "16:00", city: "Guangzhou", location: "", notes: "16h00–17h00.", done: false },
-      { id: uid(), title: "🍽️ Dîner — Red Dragon (Jap Halal) ou Hui People", category: "repas", date: "2026-09-27", time: "19:30", city: "Guangzhou", location: "", notes: "", done: false },
+      { id: uid(), title: "🍽️ Dîner avec Sophia Chen (GBM)", category: "repas", date: "2026-09-27", time: "18:30", city: "Guangzhou", location: "", notes: "Après la visite usine, retour à Guangzhou pour dîner ensemble.", done: false },
       { id: uid(), title: "🏋️ Séance sport #2", category: "sport", date: "2026-09-28", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-28", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "💄 Guangzhou Beauty Exchange Center", category: "activite", date: "2026-09-28", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–12h30.", done: false },
@@ -134,10 +134,10 @@ function defaultData() {
     ],
     suppliers: [
       {
-        id: uid(), company: "Sophia Chen (GBM)", contact: "Sophia Chen", phone: "", email: "",
-        date: "2026-09-27", time: "", city: "Guangzhou", location: "À demander à Sophia (transport hôtel-usine offert par elle)",
-        products: "Vegan Suede, daim kaki (couleur 144)", status: "a_confirmer",
-        notes: "Visite usine + présentation sample. 🟡 Heure à définir + demander adresse.",
+        id: uid(), company: "Sophia Chen (GBM)", contact: "Sophia Chen", phone: "+86 131 2207 3667", email: "",
+        date: "2026-09-27", time: "14:00–16:00", city: "Guangzhou", location: "Pickup à l'hôtel par Sophia à 14h00 (transport hôtel-usine offert par elle)",
+        products: "Vegan Suede, daim kaki (couleur 144)", status: "confirme",
+        notes: "Pickup 14h00 → arrivée usine ~15h00 → visite usine (~1h) + présentation sample. 🟢 Confirmé par Sophia via WhatsApp. Retour à Guangzhou et dîner ensemble après la visite.",
       },
       {
         id: uid(), company: "Nina & Cindy", contact: "Nina & Cindy", phone: "", email: "",
