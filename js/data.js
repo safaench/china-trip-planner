@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v8";
+const STORAGE_KEY = "chinaTripData_v9";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -50,15 +50,15 @@ function defaultData() {
       { id: uid(), title: "🛍️ Zhongda Market — sourcing textile", category: "activite", date: "2026-09-26", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–14h00.", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-26", time: "14:00", city: "Guangzhou", location: "", notes: "14h00–15h00.", done: false },
       { id: uid(), title: "🛍️ Zhongda / marchés textiles alentours", category: "activite", date: "2026-09-26", time: "15:00", city: "Guangzhou", location: "", notes: "15h00–17h00.", done: false },
-      { id: uid(), title: "🏨 Retour hôtel / repos", category: "activite", date: "2026-09-26", time: "17:00", city: "Guangzhou", location: "", notes: "Pas de séance de sport le 26 septembre.", done: false },
-      { id: uid(), title: "🍽️ Dîner — Chua Lam's Dim Sum", category: "repas", date: "2026-09-26", time: "19:30", city: "Guangzhou", location: "", notes: "", done: false },
+      { id: uid(), title: "⌚ Guangzhou Watch Market", category: "activite", date: "2026-09-26", time: "17:00", city: "Guangzhou", location: "", notes: "17h00–18h00. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
+      { id: uid(), title: "⌚ Second-Hand Luxury Watch Market", category: "activite", date: "2026-09-26", time: "18:00", city: "Guangzhou", location: "", notes: "18h00–19h00. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
+      { id: uid(), title: "🏨 Retour hôtel / repos", category: "activite", date: "2026-09-26", time: "19:00", city: "Guangzhou", location: "", notes: "Pas de séance de sport le 26 septembre.", done: false },
+      { id: uid(), title: "🍽️ Dîner — Chua Lam's Dim Sum", category: "repas", date: "2026-09-26", time: "20:00", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🏋️ Séance sport #1", category: "sport", date: "2026-09-27", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-27", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🛍️ Liuhua Wholesale Market", category: "activite", date: "2026-09-27", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–12h30.", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-27", time: "12:30", city: "Guangzhou", location: "", notes: "12h30–13h30.", done: false },
       { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza", category: "activite", date: "2026-09-27", time: "13:30", city: "Guangzhou", location: "", notes: "13h30–15h00.", done: false },
-      { id: uid(), title: "⌚ Guangzhou Watch Market", category: "activite", date: "2026-09-27", time: "15:00", city: "Guangzhou", location: "", notes: "15h00–16h00.", done: false },
-      { id: uid(), title: "⌚ Second-Hand Luxury Watch Market", category: "activite", date: "2026-09-27", time: "16:00", city: "Guangzhou", location: "", notes: "16h00–17h00.", done: false },
       { id: uid(), title: "🍽️ Dîner avec Sophia Chen (GBM)", category: "repas", date: "2026-09-27", time: "18:30", city: "Guangzhou", location: "", notes: "Après la visite usine, retour à Guangzhou pour dîner ensemble.", done: false },
       { id: uid(), title: "🏋️ Séance sport #2", category: "sport", date: "2026-09-28", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-28", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
