@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v10";
+const STORAGE_KEY = "chinaTripData_v11";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -118,6 +118,7 @@ function defaultData() {
       { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-05", time: "10:45", city: "Hong Kong", location: "", notes: "Après 10h30.", done: false },
       { id: uid(), title: "🍰 Goûter / café", category: "repas", date: "2026-10-05", time: "17:30", city: "Hong Kong", location: "", notes: "", done: false },
       { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-05", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "💆 Massage", category: "activite", date: "2026-10-05", time: "21:00", city: "Hong Kong", location: "", notes: "", done: false },
       { id: uid(), title: "☕ Temps libre", category: "activite", date: "2026-10-06", time: "08:00", city: "Hong Kong", location: "", notes: "Matin.", done: false },
       { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-06", time: "12:00", city: "Hong Kong", location: "", notes: "Journée.", done: false },
       { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-06", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
