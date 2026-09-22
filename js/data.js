@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v15";
+const STORAGE_KEY = "chinaTripData_v16";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -117,17 +117,21 @@ function defaultData() {
       { id: uid(), title: "🍽️ Dîner à Hong Kong", category: "repas", date: "2026-10-04", time: "19:30", city: "Hong Kong", location: "", notes: "Soir.", done: false },
       { id: uid(), title: "🏋️ Séance sport #5", category: "sport", date: "2026-10-05", time: "09:30", city: "Hong Kong", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🥞 Brunch — BAPE Cafe (1881 Heritage)", category: "repas", date: "2026-10-05", time: "11:15", city: "Hong Kong", location: "", notes: "Zone Tsim Sha Tsui. Ouvert 11h00–21h00 (lun-jeu) / 22h00 (ven-dim).", done: false },
-      { id: uid(), title: "🛍️ Shopping / balade — Harbour City", category: "activite", date: "2026-10-05", time: "13:00", city: "Hong Kong", location: "", notes: "Tsim Sha Tsui.", done: false },
+      { id: uid(), title: "🛍️ Shopping / balade — Harbour City", category: "activite", date: "2026-10-05", time: "13:00", city: "Hong Kong", location: "", notes: "Tsim Sha Tsui. 13h00–14h30.", done: false },
+      { id: uid(), title: "👗 Hippieland (vintage)", category: "activite", date: "2026-10-05", time: "14:30", city: "Hong Kong", location: "", notes: "1/F, 47 Granville Road, Tsim Sha Tsui. 14h30–15h15. Horaires précis non trouvés — à vérifier sur place.", done: false },
       { id: uid(), title: "☕ Pause café — Cupping Room Coffee Roasters", category: "repas", date: "2026-10-05", time: "16:00", city: "Hong Kong", location: "", notes: "Shop 309, 3/F, Ocean Centre, Harbour City. Ouvert jusqu'à 20h00.", done: false },
       { id: uid(), title: "🍽️ Dîner — Lady 13 Kitchen Halal", category: "repas", date: "2026-10-05", time: "19:30", city: "Hong Kong", location: "", notes: "Valiant Commercial Building, 22-24 Prat Avenue, Tsim Sha Tsui.", done: false },
       { id: uid(), title: "💆 Massage", category: "activite", date: "2026-10-05", time: "21:00", city: "Hong Kong", location: "", notes: "", done: false },
       { id: uid(), title: "☕ Temps libre", category: "activite", date: "2026-10-06", time: "08:00", city: "Hong Kong", location: "", notes: "Matin.", done: false },
       { id: uid(), title: "🍜 Déjeuner — My Kitchen Halal", category: "repas", date: "2026-10-06", time: "12:30", city: "Hong Kong", location: "", notes: "G/F, 2H Saigon Street, Yau Ma Tei. Cuisine tibétaine halal, ouvert jusqu'à 3h du matin.", done: false },
-      { id: uid(), title: "🛍️ Shopping / balade — Jordan / Yau Ma Tei / Mong Kok", category: "activite", date: "2026-10-06", time: "14:00", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "👗 2nd STREET (vintage)", category: "activite", date: "2026-10-06", time: "14:00", city: "Hong Kong", location: "", notes: "Shop M09, MOKO, 193 Prince Edward Road West, Mong Kok. 14h00–15h00. Chaîne japonaise, ouvert jusqu'à 20h00.", done: false },
+      { id: uid(), title: "👗 Mee & Gee (vintage)", category: "activite", date: "2026-10-06", time: "15:00", city: "Hong Kong", location: "", notes: "64 Tung Choi Street, Mong Kok (proche Ladies' Market). 15h00–16h00. Friperie la plus populaire de Hong Kong.", done: false },
+      { id: uid(), title: "🛍️ Shopping / balade — Jordan / Yau Ma Tei / Mong Kok", category: "activite", date: "2026-10-06", time: "16:00", city: "Hong Kong", location: "", notes: "16h00–17h00.", done: false },
       { id: uid(), title: "🍽️ Dîner — Mama Munchies Halal", category: "repas", date: "2026-10-06", time: "19:30", city: "Hong Kong", location: "", notes: "Shop 1, G/F, Double Set Commercial Centre, 37A-37B Jordan Road, Jordan. Ouvert 11h00–00h00.", done: false },
       { id: uid(), title: "🏋️ Séance sport #6", category: "sport", date: "2026-10-07", time: "09:30", city: "Hong Kong", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "☕ Café du matin — % Arabica (The Henderson)", category: "repas", date: "2026-10-07", time: "11:15", city: "Hong Kong", location: "", notes: "2 Murray Rd, Central. Trajet direct Kwun Tong → Central (~40 min).", done: false },
-      { id: uid(), title: "🍜 Déjeuner — Islamic Centre Canteen", category: "repas", date: "2026-10-07", time: "12:30", city: "Hong Kong", location: "", notes: "5/F, Masjid Ammar and Osman Ramju Sadick Islamic Centre, 40 Oi Kwan Road, Wan Chai. Halal, dim sum. Ouvert 10h-20h. Tenue correcte recommandée.", done: false },
+      { id: uid(), title: "👗 Bang Bang 70s (vintage)", category: "activite", date: "2026-10-07", time: "11:45", city: "Hong Kong", location: "", notes: "1/F, 16A Aberdeen Street, Central (Soho) — à 5 min à pied du % Arabica. 11h45–12h30. Vintage 70s + pièces de luxe d'occasion (Chanel, Gucci, LV, Prada). Ouvert env. 14h-19h selon les sources — horaires à confirmer.", done: false },
+      { id: uid(), title: "🍜 Déjeuner — Islamic Centre Canteen", category: "repas", date: "2026-10-07", time: "12:45", city: "Hong Kong", location: "", notes: "5/F, Masjid Ammar and Osman Ramju Sadick Islamic Centre, 40 Oi Kwan Road, Wan Chai. Halal, dim sum. Ouvert 10h-20h. Tenue correcte recommandée. Décalé de 15 min (trajet Soho → Wan Chai).", done: false },
       { id: uid(), title: "🛍️ Shopping / balade — Causeway Bay", category: "activite", date: "2026-10-07", time: "14:00", city: "Hong Kong", location: "", notes: "Enchaîné avec Wan Chai, quartiers adjacents.", done: false },
       { id: uid(), title: "☕ Pause café — Hogan Coffee", category: "repas", date: "2026-10-07", time: "16:00", city: "Hong Kong", location: "", notes: "G/F, 21 Irving Street, Causeway Bay. Ouvert jusqu'à 17h30 (lun-ven).", done: false },
       { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-07", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
@@ -299,6 +303,13 @@ function defaultData() {
       // --- Shopping : centres / marchés généralistes ---
       { id: uid(), name: "K11 Mall", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "" },
       { id: uid(), name: "K11 Musea", city: "Hong Kong", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "" },
+      // --- Friperies / Vintage (Hong Kong) ---
+      { id: uid(), name: "Bang Bang 70s", city: "Hong Kong", category: "shopping", priority: "moyenne", visited: false, address: "1/F, 16A Aberdeen Street, Central (Soho)", notes: "Friperie / Vintage. Vintage 70s + pièces de luxe d'occasion (Chanel, Gucci, LV, Prada). Horaires env. 14h-19h (source Instagram : 12h-16h) — à confirmer. Intégré au programme du 7 oct." },
+      { id: uid(), name: "Hippieland (Hippie Land)", city: "Hong Kong", category: "shopping", priority: "moyenne", visited: false, address: "1/F, 47 Granville Road, Tsim Sha Tsui", notes: "Friperie / Vintage. Americana et sous-culture vintage. Horaires non trouvés. Intégré au programme du 5 oct." },
+      { id: uid(), name: "2nd STREET", city: "Hong Kong", category: "shopping", priority: "moyenne", visited: false, address: "Shop M09, MTR/F, MOKO, 193 Prince Edward Road West, Mong Kok", notes: "Friperie / Vintage. Chaîne japonaise de seconde main. Ouvert jusqu'à 20h00. Intégré au programme du 6 oct." },
+      { id: uid(), name: "Mee & Gee", city: "Hong Kong", category: "shopping", priority: "moyenne", visited: false, address: "64 Tung Choi Street, Mong Kok", notes: "Friperie / Vintage — chaîne la plus populaire de Hong Kong, plusieurs adresses (Central : 9 Li Yuen Street West ; Wan Chai : 3 Tai Yuen Street ; Mong Kok : 55 & 64 Tung Choi St, 181 Fa Yuen St ; TST : 67 Granville Road). Intégré au programme du 6 oct (adresse Mong Kok)." },
+      { id: uid(), name: "Redress", city: "Hong Kong", category: "shopping", priority: "basse", visited: false, address: "78 Apliu Street, Sham Shui Po", notes: "Friperie / Vintage caritative. Horaires : mar-jeu 12h-15h & 16h-19h, ven-dim 12h-19h, fermé lundi. Pas intégrée au programme (quartier à l'écart des journées prévues)." },
+      { id: uid(), name: "The One", city: "Hong Kong", category: "shopping", priority: "basse", visited: false, address: "", notes: "Friperie / Vintage — nom à vérifier : aucune friperie sous ce nom identifiée avec certitude. Pourrait être confondu avec le centre commercial « THE ONE » (100 Nathan Road, Tsim Sha Tsui). Pas intégrée au programme faute d'adresse fiable — précise-moi le quartier ou une adresse si tu l'as." },
       { id: uid(), name: "Zhongda Market", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "De tout, plutôt B2B." },
       { id: uid(), name: "KKV", city: "", category: "shopping", priority: "basse", visited: false, address: "", notes: "Équivalent chinois d'Action." },
       { id: uid(), name: "Marchés de gros de Liuhua", city: "Guangzhou", category: "shopping", priority: "haute", visited: false, address: "", notes: "Grossistes : vêtements, cuir, contrefaçons, Beijing Lu." },
