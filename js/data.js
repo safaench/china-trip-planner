@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v14";
+const STORAGE_KEY = "chinaTripData_v15";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -50,26 +50,27 @@ function defaultData() {
       { id: uid(), title: "🛍️ Zhongda Market — sourcing textile", category: "activite", date: "2026-09-26", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–14h00.", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-26", time: "14:00", city: "Guangzhou", location: "", notes: "14h00–15h00.", done: false },
       { id: uid(), title: "🛍️ Zhongda / marchés textiles alentours", category: "activite", date: "2026-09-26", time: "15:00", city: "Guangzhou", location: "", notes: "15h00–17h00.", done: false },
-      { id: uid(), title: "⌚ Guangzhou Watch Market", category: "activite", date: "2026-09-26", time: "17:00", city: "Guangzhou", location: "", notes: "17h00–18h00. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
-      { id: uid(), title: "⌚ Second-Hand Luxury Watch Market", category: "activite", date: "2026-09-26", time: "18:00", city: "Guangzhou", location: "", notes: "18h00–19h00. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
-      { id: uid(), title: "🏨 Retour hôtel / repos", category: "activite", date: "2026-09-26", time: "19:00", city: "Guangzhou", location: "", notes: "Pas de séance de sport le 26 septembre.", done: false },
-      { id: uid(), title: "🍽️ Dîner — Chua Lam's Dim Sum", category: "repas", date: "2026-09-26", time: "20:00", city: "Guangzhou", location: "", notes: "", done: false },
+      { id: uid(), title: "💊 Parapharmacie", category: "activite", date: "2026-09-26", time: "17:00", city: "Guangzhou", location: "Watsons (屈臣氏) — quartier de Zhanxi Road / Yuexiu, à confirmer sur place (chaîne très présente dans le secteur)", notes: "17h00–17h45. Sur le trajet entre Zhongda et les marchés de montres.", done: false },
+      { id: uid(), title: "⌚ Guangzhou Watch Market", category: "activite", date: "2026-09-26", time: "17:45", city: "Guangzhou", location: "", notes: "17h45–18h45. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
+      { id: uid(), title: "⌚ Second-Hand Luxury Watch Market", category: "activite", date: "2026-09-26", time: "18:45", city: "Guangzhou", location: "", notes: "18h45–19h45. Reporté du 27 sept (conflit avec le RDV Sophia Chen).", done: false },
+      { id: uid(), title: "🏨 Retour hôtel / repos", category: "activite", date: "2026-09-26", time: "19:45", city: "Guangzhou", location: "", notes: "Pas de séance de sport le 26 septembre.", done: false },
+      { id: uid(), title: "🍽️ Dîner — Chua Lam's Dim Sum", category: "repas", date: "2026-09-26", time: "20:45", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🏋️ Séance sport #1", category: "sport", date: "2026-09-27", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-27", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
-      { id: uid(), title: "🛍️ Liuhua Wholesale Market", category: "activite", date: "2026-09-27", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–12h30.", done: false },
-      { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-27", time: "12:30", city: "Guangzhou", location: "", notes: "12h30–13h30.", done: false },
+      { id: uid(), title: "🛍️ Liuhua Wholesale Market", category: "activite", date: "2026-09-27", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–13h00. Allongé à 2h pour avoir le temps de comparer / négocier.", done: false },
+      { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-27", time: "13:00", city: "Guangzhou", location: "", notes: "13h00–13h45, rapide avant le pickup de Sophia à 14h00.", done: false },
       { id: uid(), title: "🍽️ Dîner avec Sophia Chen (GBM)", category: "repas", date: "2026-09-27", time: "18:30", city: "Guangzhou", location: "", notes: "Après la visite usine, retour à Guangzhou pour dîner ensemble.", done: false },
       { id: uid(), title: "🏋️ Séance sport #2", category: "sport", date: "2026-09-28", time: "09:30", city: "Guangzhou", location: "", notes: "9h30–10h30.", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-28", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
-      { id: uid(), title: "💄 Guangzhou Beauty Exchange Center", category: "activite", date: "2026-09-28", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–12h30.", done: false },
-      { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-28", time: "12:30", city: "Guangzhou", location: "", notes: "12h30–13h30.", done: false },
+      { id: uid(), title: "💄 Guangzhou Beauty Exchange Center", category: "activite", date: "2026-09-28", time: "11:00", city: "Guangzhou", location: "", notes: "11h00–13h00. Allongé à 2h pour avoir le temps de comparer / négocier.", done: false },
+      { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-28", time: "13:00", city: "Guangzhou", location: "", notes: "13h00–13h45, rapide avant le RDV Nina & Cindy à 14h00.", done: false },
       { id: uid(), title: "💄 Guangzhou Xingfa Plaza", category: "activite", date: "2026-09-28", time: "15:15", city: "Guangzhou", location: "", notes: "15h15–16h45.", done: false },
       { id: uid(), title: "📱 Guangzhou Electronic Market", category: "activite", date: "2026-09-28", time: "17:00", city: "Guangzhou", location: "", notes: "17h00–18h00.", done: false },
       { id: uid(), title: "💇 Brushing — Salon L'Oréal", category: "activite", date: "2026-09-28", time: "18:30", city: "Guangzhou", location: "", notes: "18h30–19h30.", done: false },
       { id: uid(), title: "🍽️ Dîner — Dicos / Burger Plus", category: "repas", date: "2026-09-28", time: "20:00", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-29", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-29", time: "12:00", city: "Guangzhou", location: "", notes: "12h00–13h00.", done: false },
-      { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza", category: "activite", date: "2026-09-29", time: "13:00", city: "Guangzhou", location: "", notes: "13h00–14h00. Créneau raccourci suite à l'avancement du train à 15h00 (déplacé du 27 sept, conflit avec le RDV Sophia Chen).", done: false },
+      { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza + Kinbo Fashion Market", category: "activite", date: "2026-09-29", time: "13:00", city: "Guangzhou", location: "", notes: "13h00–14h00. Kinbo Fashion Market est sur la même rue (Zhanxi Road), donc ajouté sans détour supplémentaire. Créneau raccourci suite à l'avancement du train à 15h00 (déplacé du 27 sept, conflit avec le RDV Sophia Chen).", done: false },
       { id: uid(), title: "🏨 Retour hôtel + récupération des bagages", category: "activite", date: "2026-09-29", time: "14:00", city: "Guangzhou", location: "", notes: "14h00–14h30, puis départ vers la gare (marge de sécurité avant l'embarquement à 15h00).", done: false },
       { id: uid(), title: "🚄 Train Guangzhou → Shenzhen", category: "transport", date: "2026-09-29", time: "15:00", city: "Shenzhen", location: "", notes: "Départ 15h00 de Guangzhoudong. Train C8017 — voir l'onglet Trains pour le détail. Arrivée à Shenzhen ~15h58.", done: false },
       { id: uid(), title: "🚕 Trajet gare → hôtel + check-in + installation", category: "activite", date: "2026-09-29", time: "16:00", city: "Shenzhen", location: "", notes: "", done: false },
@@ -278,6 +279,7 @@ function defaultData() {
       { id: uid(), name: "NOC / Not Only Coffee Hong Kong", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "Shop 4, G/F, Bohemian House, 321 Des Voeux Road West, Sai Ying Pun", notes: "Plusieurs adresses à Hong Kong (Sai Ying Pun, Central, Sheung Wan, Wan Chai, Admiralty, Causeway Bay...)." },
       { id: uid(), name: "FINEPRINT", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "G/F, 38 Peel Street, Soho, Central", notes: "Autres adresses : Pedder Building (Central), Three Exchange Square (Central), Quarry Bay." },
       { id: uid(), name: "Hogan Coffee – Causeway Bay", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "G/F, 21 Irving Street, Causeway Bay", notes: "" },
+      { id: uid(), name: "Cotti Coffee", city: "Hong Kong", category: "dessert", priority: "basse", visited: false, address: "Shop 7, 1/F, Brim 28, Causeway Centre, 28 Harbour Road, Wan Chai", notes: "Chaîne chinoise. Adresse Wan Chai choisie car proche du programme du 7 oct (Islamic Centre Canteen, Causeway Bay). Autre adresse à Hong Kong : Shop 30-36, New Mandarin Plaza, 14 Science Museum Road, Tsim Sha Tsui." },
       { id: uid(), name: "Bébé Donut", city: "Shenzhen", category: "dessert", priority: "moyenne", visited: false, address: "", notes: "" },
       // --- Activités ---
       { id: uid(), name: "Coco Park", city: "Shenzhen", category: "activite", priority: "moyenne", visited: false, address: "", notes: "Zone commerciale ouverte." },
@@ -302,7 +304,7 @@ function defaultData() {
       { id: uid(), name: "Marchés de gros de Liuhua", city: "Guangzhou", category: "shopping", priority: "haute", visited: false, address: "", notes: "Grossistes : vêtements, cuir, contrefaçons, Beijing Lu." },
       { id: uid(), name: "Adidas", city: "", category: "shopping", priority: "basse", visited: false, address: "", notes: "" },
       { id: uid(), name: "Issey Miyake", city: "", category: "shopping", priority: "basse", visited: false, address: "", notes: "" },
-      { id: uid(), name: "Kinbo Fashion Market", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "" },
+      { id: uid(), name: "Kinbo Fashion Market", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "Zhanxi Road, Yuexiu District, Guangzhou (à côté du Zhanxi Watch Center)", notes: "Vêtements foreign trade / streetwear. Intégré au programme du 29 sept (même rue que les marchés de chaussures)." },
       { id: uid(), name: "Guangzhou Zhanxi (seconde main)", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "Marché de seconde main." },
       { id: uid(), name: "Second-Hand Luxury Watch Market", city: "Guangzhou", category: "shopping", priority: "moyenne", visited: false, address: "", notes: "Montres de luxe d'occasion. Les marchés sont plutôt pour du gros — on peut parfois négocier un échantillon à l'unité, mais dire que c'est pour un achat personnel fait payer beaucoup plus cher." },
       // --- Shopping : chaussures ---
