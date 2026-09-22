@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v13";
+const STORAGE_KEY = "chinaTripData_v14";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -115,16 +115,20 @@ function defaultData() {
       { id: uid(), title: "🏨 Arrivée + check-in à Hong Kong", category: "activite", date: "2026-10-04", time: "18:00", city: "Hong Kong", location: "", notes: "Fin d'après-midi / soir.", done: false },
       { id: uid(), title: "🍽️ Dîner à Hong Kong", category: "repas", date: "2026-10-04", time: "19:30", city: "Hong Kong", location: "", notes: "Soir.", done: false },
       { id: uid(), title: "🏋️ Séance sport #5", category: "sport", date: "2026-10-05", time: "09:30", city: "Hong Kong", location: "", notes: "9h30–10h30.", done: false },
-      { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-05", time: "10:45", city: "Hong Kong", location: "", notes: "Après 10h30.", done: false },
-      { id: uid(), title: "🍰 Goûter / café", category: "repas", date: "2026-10-05", time: "17:30", city: "Hong Kong", location: "", notes: "", done: false },
-      { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-05", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "🥞 Brunch — BAPE Cafe (1881 Heritage)", category: "repas", date: "2026-10-05", time: "11:15", city: "Hong Kong", location: "", notes: "Zone Tsim Sha Tsui. Ouvert 11h00–21h00 (lun-jeu) / 22h00 (ven-dim).", done: false },
+      { id: uid(), title: "🛍️ Shopping / balade — Harbour City", category: "activite", date: "2026-10-05", time: "13:00", city: "Hong Kong", location: "", notes: "Tsim Sha Tsui.", done: false },
+      { id: uid(), title: "☕ Pause café — Cupping Room Coffee Roasters", category: "repas", date: "2026-10-05", time: "16:00", city: "Hong Kong", location: "", notes: "Shop 309, 3/F, Ocean Centre, Harbour City. Ouvert jusqu'à 20h00.", done: false },
+      { id: uid(), title: "🍽️ Dîner — Lady 13 Kitchen Halal", category: "repas", date: "2026-10-05", time: "19:30", city: "Hong Kong", location: "", notes: "Valiant Commercial Building, 22-24 Prat Avenue, Tsim Sha Tsui.", done: false },
       { id: uid(), title: "💆 Massage", category: "activite", date: "2026-10-05", time: "21:00", city: "Hong Kong", location: "", notes: "", done: false },
       { id: uid(), title: "☕ Temps libre", category: "activite", date: "2026-10-06", time: "08:00", city: "Hong Kong", location: "", notes: "Matin.", done: false },
-      { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-06", time: "12:00", city: "Hong Kong", location: "", notes: "Journée.", done: false },
-      { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-06", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "🍜 Déjeuner — My Kitchen Halal", category: "repas", date: "2026-10-06", time: "12:30", city: "Hong Kong", location: "", notes: "G/F, 2H Saigon Street, Yau Ma Tei. Cuisine tibétaine halal, ouvert jusqu'à 3h du matin.", done: false },
+      { id: uid(), title: "🛍️ Shopping / balade — Jordan / Yau Ma Tei / Mong Kok", category: "activite", date: "2026-10-06", time: "14:00", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "🍽️ Dîner — Mama Munchies Halal", category: "repas", date: "2026-10-06", time: "19:30", city: "Hong Kong", location: "", notes: "Shop 1, G/F, Double Set Commercial Centre, 37A-37B Jordan Road, Jordan. Ouvert 11h00–00h00.", done: false },
       { id: uid(), title: "🏋️ Séance sport #6", category: "sport", date: "2026-10-07", time: "09:30", city: "Hong Kong", location: "", notes: "9h30–10h30.", done: false },
-      { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-07", time: "10:45", city: "Hong Kong", location: "", notes: "Après 10h30.", done: false },
-      { id: uid(), title: "🍰 Goûter / café", category: "repas", date: "2026-10-07", time: "17:30", city: "Hong Kong", location: "", notes: "", done: false },
+      { id: uid(), title: "☕ Café du matin — % Arabica (The Henderson)", category: "repas", date: "2026-10-07", time: "11:15", city: "Hong Kong", location: "", notes: "2 Murray Rd, Central. Trajet direct Kwun Tong → Central (~40 min).", done: false },
+      { id: uid(), title: "🍜 Déjeuner — Islamic Centre Canteen", category: "repas", date: "2026-10-07", time: "12:30", city: "Hong Kong", location: "", notes: "5/F, Masjid Ammar and Osman Ramju Sadick Islamic Centre, 40 Oi Kwan Road, Wan Chai. Halal, dim sum. Ouvert 10h-20h. Tenue correcte recommandée.", done: false },
+      { id: uid(), title: "🛍️ Shopping / balade — Causeway Bay", category: "activite", date: "2026-10-07", time: "14:00", city: "Hong Kong", location: "", notes: "Enchaîné avec Wan Chai, quartiers adjacents.", done: false },
+      { id: uid(), title: "☕ Pause café — Hogan Coffee", category: "repas", date: "2026-10-07", time: "16:00", city: "Hong Kong", location: "", notes: "G/F, 21 Irving Street, Causeway Bay. Ouvert jusqu'à 17h30 (lun-ven).", done: false },
       { id: uid(), title: "🍽️ Dîner", category: "repas", date: "2026-10-07", time: "19:30", city: "Hong Kong", location: "", notes: "", done: false },
       { id: uid(), title: "☕ Temps libre", category: "activite", date: "2026-10-08", time: "08:00", city: "Hong Kong", location: "", notes: "Matin.", done: false },
       { id: uid(), title: "Activité à définir", category: "activite", date: "2026-10-08", time: "12:00", city: "Hong Kong", location: "", notes: "Journée.", done: false },
