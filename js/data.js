@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v12";
+const STORAGE_KEY = "chinaTripData_v13";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -254,6 +254,10 @@ function defaultData() {
       { id: uid(), name: "Red Dragon (Jap Halal)", city: "Guangzhou", category: "food", priority: "haute", visited: false, address: "Shop A20, Building 1, No. 141 Xiwan Road, Liwan District, Guangzhou", notes: "Halal (清真)." },
       { id: uid(), name: "Burger Plus", city: "Guangzhou", category: "food", priority: "moyenne", visited: false, address: "", notes: "" },
       { id: uid(), name: "LN Garden Hotel", city: "Guangzhou", category: "food", priority: "moyenne", visited: false, address: "", notes: "" },
+      { id: uid(), name: "Islamic Centre Canteen", city: "Hong Kong", category: "food", priority: "moyenne", visited: false, address: "5/F, Masjid Ammar and Osman Ramju Sadick Islamic Centre, 40 Oi Kwan Road, Wan Chai", notes: "Halal — dim sum cantonais, premier restaurant à proposer du dim sum halal à Hong Kong. Tenue correcte recommandée (situé dans un centre islamique)." },
+      { id: uid(), name: "My Kitchen Halal", city: "Hong Kong", category: "food", priority: "moyenne", visited: false, address: "G/F, 2H Saigon Street, Yau Ma Tei", notes: "Halal — cuisine tibétaine." },
+      { id: uid(), name: "Lady 13 Kitchen Halal", city: "Hong Kong", category: "food", priority: "moyenne", visited: false, address: "Valiant Commercial Building, 22-24 Prat Avenue, Tsim Sha Tsui", notes: "Halal — cuisine chinoise, spécialités de nouilles." },
+      { id: uid(), name: "Mama Munchies Halal", city: "Hong Kong", category: "food", priority: "moyenne", visited: false, address: "Shop 1, G/F, Double Set Commercial Centre, 37A-37B Jordan Road, Jordan", notes: "Halal certifié." },
       // --- Drinks ---
       { id: uid(), name: "HunJuice", city: "", category: "drinks", priority: "moyenne", visited: false, address: "", notes: "Chaîne de jus naturels." },
       { id: uid(), name: "Eyebar", city: "Hong Kong", category: "drinks", priority: "moyenne", visited: false, address: "", notes: "Rooftop." },
@@ -262,6 +266,14 @@ function defaultData() {
       // --- Coffee & dessert ---
       { id: uid(), name: "Vission Bakery", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "", notes: "" },
       { id: uid(), name: "Winston's Coffee", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "", notes: "" },
+      { id: uid(), name: "N.O.T. Specialty Coffee", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "9/F, Hysan Place, 500 Hennessy Road, Causeway Bay", notes: "Autre adresse : Central (2/F, Nexxus Building, 41 Connaught Road Central)." },
+      { id: uid(), name: "% Arabica Coffee – The Henderson", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "The Henderson, 2 Murray Rd, Central", notes: "" },
+      { id: uid(), name: "BAPE Cafe Hong Kong", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "Shop G08A & G08B, G/F, 1881 Heritage, 2A Canton Road, Tsim Sha Tsui", notes: "BAPE Café!? produced by Flipper's." },
+      { id: uid(), name: "Little Cove Espresso", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "Kiosk, 1/F, Temporary Footbridge, New Central Harbourfront, Man Yiu Street, Central", notes: "Autres adresses : Kennedy Town, Admiralty (Pacific Place), Sai Kung, Quarry Bay." },
+      { id: uid(), name: "Cupping Room Coffee Roasters – Harbour City", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "Shop 309, 3/F, Ocean Centre, Harbour City, 5 Canton Road, Tsim Sha Tsui", notes: "" },
+      { id: uid(), name: "NOC / Not Only Coffee Hong Kong", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "Shop 4, G/F, Bohemian House, 321 Des Voeux Road West, Sai Ying Pun", notes: "Plusieurs adresses à Hong Kong (Sai Ying Pun, Central, Sheung Wan, Wan Chai, Admiralty, Causeway Bay...)." },
+      { id: uid(), name: "FINEPRINT", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "G/F, 38 Peel Street, Soho, Central", notes: "Autres adresses : Pedder Building (Central), Three Exchange Square (Central), Quarry Bay." },
+      { id: uid(), name: "Hogan Coffee – Causeway Bay", city: "Hong Kong", category: "dessert", priority: "moyenne", visited: false, address: "G/F, 21 Irving Street, Causeway Bay", notes: "" },
       { id: uid(), name: "Bébé Donut", city: "Shenzhen", category: "dessert", priority: "moyenne", visited: false, address: "", notes: "" },
       // --- Activités ---
       { id: uid(), name: "Coco Park", city: "Shenzhen", category: "activite", priority: "moyenne", visited: false, address: "", notes: "Zone commerciale ouverte." },
@@ -274,6 +286,7 @@ function defaultData() {
       { id: uid(), name: "Shuiwei 1368 Cultural Street", city: "Shenzhen", category: "quartier", priority: "moyenne", visited: false, address: "", notes: "Vie nocturne façon market, restos, etc." },
       { id: uid(), name: "Yunhai Angel Bay", city: "Shenzhen", category: "nature", priority: "moyenne", visited: false, address: "", notes: "Côte, plage, coucher de soleil — très beau mais à 1h/1h30 de Shenzhen." },
       { id: uid(), name: "Temple Street (Night Market)", city: "Hong Kong", category: "quartier", priority: "moyenne", visited: false, address: "", notes: "Night market." },
+      { id: uid(), name: "Causeway Bay", city: "Hong Kong", category: "quartier", priority: "moyenne", visited: false, address: "", notes: "Quartier shopping et vie nocturne — plusieurs cafés et restaurants ajoutés s'y trouvent (Hogan Coffee, NOC, N.O.T. Specialty Coffee)." },
       // --- Spa 24h ---
       { id: uid(), name: "Yoma Spa", city: "Guangzhou", category: "spa", priority: "moyenne", visited: false, address: "", notes: "Spa 24h." },
       { id: uid(), name: "Tenz Spa", city: "Shenzhen", category: "spa", priority: "moyenne", visited: false, address: "", notes: "Spa 24h." },
