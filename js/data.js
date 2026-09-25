@@ -1,6 +1,6 @@
 // Modèle de données + persistance (localStorage)
 
-const STORAGE_KEY = "chinaTripData_v16";
+const STORAGE_KEY = "chinaTripData_v17";
 
 function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -30,7 +30,7 @@ function defaultData() {
       },
       {
         id: uid(), title: "Jay (Jay Yuan)", category: "rdv",
-        date: "2026-09-29", time: "11:00–12:00", city: "Guangzhou",
+        date: "2026-09-29", time: "09:00–10:00", city: "Guangzhou",
         location: "No. 36, Heyun Road, Jianggao Town, Baiyun area, Guangzhou city, Guangdong Province, China.",
         notes: "Présentation fournisseur + évaluation produit / capacités de production (cuir marron).",
         done: false,
@@ -68,7 +68,7 @@ function defaultData() {
       { id: uid(), title: "📱 Guangzhou Electronic Market", category: "activite", date: "2026-09-28", time: "17:00", city: "Guangzhou", location: "", notes: "17h00–18h00.", done: false },
       { id: uid(), title: "💇 Brushing — Salon L'Oréal", category: "activite", date: "2026-09-28", time: "18:30", city: "Guangzhou", location: "", notes: "18h30–19h30.", done: false },
       { id: uid(), title: "🍽️ Dîner — Dicos / Burger Plus", category: "repas", date: "2026-09-28", time: "20:00", city: "Guangzhou", location: "", notes: "", done: false },
-      { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-29", time: "10:30", city: "Guangzhou", location: "", notes: "", done: false },
+      { id: uid(), title: "🚕 Départ de l'hôtel", category: "transport", date: "2026-09-29", time: "08:30", city: "Guangzhou", location: "", notes: "Pour le RDV avec Jay à 9h00.", done: false },
       { id: uid(), title: "🍜 Déjeuner", category: "repas", date: "2026-09-29", time: "12:00", city: "Guangzhou", location: "", notes: "12h00–13h00.", done: false },
       { id: uid(), title: "👟 Zhanxi Road + Zhanxi Shoe Wholesale + Futian Shoes Market + Euro Commercial Plaza + Kinbo Fashion Market", category: "activite", date: "2026-09-29", time: "13:00", city: "Guangzhou", location: "", notes: "13h00–14h00. Kinbo Fashion Market est sur la même rue (Zhanxi Road), donc ajouté sans détour supplémentaire. Créneau raccourci suite à l'avancement du train à 15h00 (déplacé du 27 sept, conflit avec le RDV Sophia Chen).", done: false },
       { id: uid(), title: "🏨 Retour hôtel + récupération des bagages", category: "activite", date: "2026-09-29", time: "14:00", city: "Guangzhou", location: "", notes: "14h00–14h30, puis départ vers la gare (marge de sécurité avant l'embarquement à 15h00).", done: false },
@@ -156,7 +156,7 @@ function defaultData() {
       },
       {
         id: uid(), company: "Jay", contact: "Jay Yuan", phone: "", email: "",
-        date: "2026-09-29", time: "11:00–12:00", city: "Guangzhou", location: "No. 36, Heyun Road, Jianggao Town, Baiyun area, Guangzhou city, Guangdong Province, China.",
+        date: "2026-09-29", time: "09:00–10:00", city: "Guangzhou", location: "No. 36, Heyun Road, Jianggao Town, Baiyun area, Guangzhou city, Guangdong Province, China.",
         products: "Cuir marron (daim noir selon satisfaction échantillon Robert)", status: "a_confirmer",
         notes: "Présentation fournisseur + évaluation produit / capacités de production. 🟡 À rencontrer.",
       },
